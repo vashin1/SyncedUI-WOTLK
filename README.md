@@ -3,9 +3,8 @@
 An addon compilation and custom ElvUI profile for WOTLK clients.  
 
 ## Screenshots
-![Screenshot](http://i.imgur.com/5iLXlqf.jpg)
+![Screenshot](https://i.imgur.com/ELeaVAA.jpg)
 
-![Screenshot](http://i.imgur.com/3IAHQ7X.jpg)
 
 
 ## Installation
