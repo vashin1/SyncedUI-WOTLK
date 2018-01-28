@@ -16,14 +16,13 @@ An addon compilation and custom ElvUI profile for WOTLK clients.
 4) Launch game and log into your main character and take some time to setup your video, sound and Interface settings. 
 5) Open the ElvUI configuration by typing /elvUI or hitting escape  
 6) Browse to "Profiles"  
-7) Select import a profile and copy and paste the string I've included in the Synced-UI-WOTLK-Profile.txt document  
-8) /reloadUI  
+7) Select import a profile and copy and paste the string I've included in the Synced-UI-WOTLK-Profile.txt document   
 
 
 ## Commands
 
 Atlasloot - /al  
-Skada - /skada
+Skada - /skada  
 Omen - /omen  
 
 
