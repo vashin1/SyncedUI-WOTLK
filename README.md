@@ -1,4 +1,4 @@
-# SyncedUI - 
+# SyncedUI - WOTLK
 An addon compilation and custom ElvUI profile for WOTLK clients.  
 
 ## Installation
@@ -15,7 +15,7 @@ Note: I suggest adding these boss mods from Xeth if you play on Sunwell - https:
 Atlasloot - /al  
 Skada - /skada  
 Omen - /omen  
-ElvUI - /elvUI
-Weakauras - /wa
+ElvUI - /elvUI  
+Weakauras - /wa  
 
 
