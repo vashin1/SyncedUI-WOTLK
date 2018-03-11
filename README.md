@@ -3,7 +3,7 @@ An addon compilation and custom ElvUI profile for WOTLK clients.
 
 ## Installation
 
-Instructions are included in the zip!  Follow them closely!
+Instructions are included in the zip!  Follow them closely!  
 Note: I suggest adding these boss mods from Xeth if you play on Sunwell - https://github.com/xethra89/DBM-Angrathar
 
 ## Screenshots
