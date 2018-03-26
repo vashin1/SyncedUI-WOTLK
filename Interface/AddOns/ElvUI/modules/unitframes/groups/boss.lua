@@ -11,6 +11,8 @@ local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");
 
 local BossHeader = CreateFrame("Frame", "BossHeader", UIParent);
+BossHeader:SetFrameStrata("LOW")
+
 function UF:Construct_BossFrames(frame)
 	frame.RaisedElementParent = CreateFrame("Frame", nil, frame);
 	frame.RaisedElementParent.TextureParent = CreateFrame("Frame", nil, frame.RaisedElementParent)
@@ -67,6 +69,7 @@ function UF:Update_BossFrames(frame, db)
 		frame.USE_INFO_PANEL = not frame.USE_MINI_POWERBAR and not frame.USE_POWERBAR_OFFSET and db.infoPanel.enable;
 		frame.INFO_PANEL_HEIGHT = frame.USE_INFO_PANEL and db.infoPanel.height or 0;
 
+		frame.HAPPINESS_WIDTH = 0
 		frame.BOTTOM_OFFSET = UF:GetHealthBottomOffset(frame);
 
 		frame.VARIABLES_SET = true;

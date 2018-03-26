@@ -676,6 +676,12 @@ P["unitframe"] = {
 				[4] = {r = .9, g = .1, b = 1}
 			},
 		},
+		["debuffHighlight"] = {
+			["Magic"] = {r = 0.2, g = 0.6, b = 1, a = 0.45},
+			["Curse"] = {r = 0.6, g = 0, b = 1, a = 0.45},
+			["Disease"] = {r = 0.6, g = 0.4, b = 0, a = 0.45},
+			["Poison"] = {r = 0, g = 0.6, b = 0, a = 0.45}
+		}
 	},
 
 	["units"] = {
@@ -744,7 +750,8 @@ P["unitframe"] = {
 				["anchorPoint"] = "TOPLEFT",
 				["xOffset"] = -3,
 				["yOffset"] = 6,
-				["size"] = 22
+				["size"] = 22,
+				["texture"] = "DEFAULT"
 			},
 			["CombatIcon"] = {
 				["enable"] = true,
@@ -825,18 +832,20 @@ P["unitframe"] = {
 				["enable"] = true,
 				["fill"] = "fill",
 				["height"] = 10,
+				["autoHide"] = false,
+				["additionalPowerText"] = true,
 				["detachFromFrame"] = false,
 				["detachedWidth"] = 250,
-				["autoHide"] = false,
 				["parent"] = "FRAME",
 				["verticalOrientation"] = false,
-				["additionalPowerText"] = true,
+				["orientation"] = "HORIZONTAL",
+				["spacing"] = 1,
 				["strataAndLevel"] = {
 					["useCustomStrata"] = false,
 					["frameStrata"] = "LOW",
 					["useCustomLevel"] = false,
-					["frameLevel"] = 1,
-				},
+					["frameLevel"] = 1
+				}
 			},
 			["aurabar"] = {
 				["enable"] = true,
@@ -1436,6 +1445,11 @@ P["unitframe"] = {
 				["overlay"] = false,
 				["style"] = "3D",
 			},
+			["happiness"] = {
+				["enable"] = false,
+				["autoHide"] = false,
+				["width"] = 10,
+			},
 			["buffs"] = {
 				["enable"] = false,
 				["perrow"] = 7,
@@ -1883,7 +1897,7 @@ P["unitframe"] = {
 			["rdebuffs"] = {
 				["enable"] = false,
 				["showDispellableDebuff"] = true,
-				["onlyMatchSpellID"] = true,
+				["onlyMatchSpellID"] = false,
 				["fontSize"] = 10,
 				["font"] = "Homespun",
 				["fontOutline"] = "MONOCHROMEOUTLINE",
@@ -2069,7 +2083,7 @@ P["unitframe"] = {
 			["rdebuffs"] = {
 				["enable"] = true,
 				["showDispellableDebuff"] = true,
-				["onlyMatchSpellID"] = true,
+				["onlyMatchSpellID"] = false,
 				["fontSize"] = 10,
 				["font"] = "Homespun",
 				["fontOutline"] = "MONOCHROMEOUTLINE",
@@ -2221,7 +2235,7 @@ P["unitframe"] = {
 			["rdebuffs"] = {
 				["enable"] = false,
 				["showDispellableDebuff"] = true,
-				["onlyMatchSpellID"] = true,
+				["onlyMatchSpellID"] = false,
 				["fontSize"] = 10,
 				["font"] = "Homespun",
 				["fontOutline"] = "MONOCHROMEOUTLINE",
@@ -2369,7 +2383,7 @@ P["unitframe"] = {
 			["rdebuffs"] = {
 				["enable"] = true,
 				["showDispellableDebuff"] = true,
-				["onlyMatchSpellID"] = true,
+				["onlyMatchSpellID"] = false,
 				["fontSize"] = 10,
 				["font"] = "Homespun",
 				["fontOutline"] = "MONOCHROMEOUTLINE",
@@ -2450,7 +2464,7 @@ P["unitframe"] = {
 			["rdebuffs"] = {
 				["enable"] = true,
 				["showDispellableDebuff"] = true,
-				["onlyMatchSpellID"] = true,
+				["onlyMatchSpellID"] = false,
 				["fontSize"] = 10,
 				["font"] = "Homespun",
 				["fontOutline"] = "MONOCHROMEOUTLINE",
@@ -2532,7 +2546,7 @@ P["unitframe"] = {
 			["rdebuffs"] = {
 				["enable"] = true,
 				["showDispellableDebuff"] = true,
-				["onlyMatchSpellID"] = true,
+				["onlyMatchSpellID"] = false,
 				["fontSize"] = 10,
 				["font"] = "Homespun",
 				["fontOutline"] = "MONOCHROMEOUTLINE",

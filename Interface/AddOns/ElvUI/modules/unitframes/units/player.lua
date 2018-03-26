@@ -22,12 +22,17 @@ function UF:Construct_PlayerFrame(frame)
 	frame.Debuffs = self:Construct_Debuffs(frame);
 	frame.Castbar = self:Construct_Castbar(frame, L["Player Castbar"]);
 
+	if CAN_HAVE_CLASSBAR then
+		frame.ClassBarHolder = CreateFrame("Frame", nil, frame)
+		frame.ClassBarHolder:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 150)
+	end
+
 	if(E.myclass == "DEATHKNIGHT") then
 		frame.Runes = self:Construct_DeathKnightResourceBar(frame);
 		frame.ClassBar = "Runes";
 	elseif(E.myclass == "DRUID") then
-		frame.DruidAltMana = self:Construct_DruidAltManaBar(frame);
-		frame.ClassBar = "DruidAltMana";
+		frame.AdditionalPower = self:Construct_AdditionalPowerBar(frame, nil, UF.UpdateClassBar)
+		frame.ClassBar = "AdditionalPower"
 	end
 
 	frame.RaidTargetIndicator = UF:Construct_RaidIcon(frame);
@@ -82,6 +87,7 @@ function UF:Update_PlayerFrame(frame, db)
 		frame.USE_INFO_PANEL = not frame.USE_MINI_POWERBAR and not frame.USE_POWERBAR_OFFSET and db.infoPanel.enable;
 		frame.INFO_PANEL_HEIGHT = frame.USE_INFO_PANEL and db.infoPanel.height or 0;
 
+		frame.HAPPINESS_WIDTH = 0
 		frame.BOTTOM_OFFSET = UF:GetHealthBottomOffset(frame);
 
 		frame.VARIABLES_SET = true;
@@ -146,3 +152,18 @@ function UF:Update_PlayerFrame(frame, db)
 end
 
 tinsert(UF["unitstoload"], "player");
+
+local function UpdateClassBar()
+	local frame = _G["ElvUF_Player"]
+	if frame and frame.ClassBar then
+		frame:UpdateElement(frame.ClassBar)
+		UF.ToggleResourceBar(frame[frame.ClassBar])
+	end
+end
+
+local f = CreateFrame("Frame")
+f:RegisterEvent("PLAYER_ENTERING_WORLD")
+f:SetScript("OnEvent", function(self, event)
+	self:UnregisterEvent(event)
+	UpdateClassBar()
+end)

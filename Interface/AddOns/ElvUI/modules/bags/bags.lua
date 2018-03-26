@@ -53,6 +53,9 @@ local NUM_BAG_FRAMES = NUM_BAG_FRAMES;
 local SEARCH_STRING = ""
 
 B.ProfessionColors = {
+	[0x0001] = {225/255, 175/255, 105/255}, -- Quiver
+	[0x0002] = {225/255, 175/255, 105/255}, -- Ammo Pouch
+	[0x0004] = {225/255, 175/255, 105/255}, -- Soul Bag
 	[0x0008] = {224/255, 187/255, 74/255}, -- Leatherworking
 	[0x0010] = {74/255, 77/255, 224/255}, -- Inscription
 	[0x0020] = {18/255, 181/255, 32/255}, -- Herbs
@@ -282,6 +285,7 @@ function B:UpdateSlot(bagID, slotID)
 
 	if(B.ProfessionColors[bagType]) then
 		slot:SetBackdropBorderColor(unpack(B.ProfessionColors[bagType]))
+		slot.ignoreBorderColors = true
 	elseif(clink) then
 		local iLvl, itemEquipLoc;
 		slot.name, _, slot.rarity, iLvl, _, _, _, _, itemEquipLoc = GetItemInfo(clink);
@@ -303,16 +307,21 @@ function B:UpdateSlot(bagID, slotID)
 
 		if questId and not isActiveQuest then
 			slot:SetBackdropBorderColor(1.0, 1.0, 0.0);
+			slot.ignoreBorderColors = true
 			slot.questIcon:Show();
 		elseif questId or isQuestItem then
 			slot:SetBackdropBorderColor(1.0, 0.3, 0.3);
+			slot.ignoreBorderColors = true
 		elseif slot.rarity and slot.rarity > 1 then
 			slot:SetBackdropBorderColor(r, g, b);
+			slot.ignoreBorderColors = true
 		else
 			slot:SetBackdropBorderColor(unpack(E.media.bordercolor));
+			slot.ignoreBorderColors = true
 		end
 	else
 		slot:SetBackdropBorderColor(unpack(E.media.bordercolor));
+		slot.ignoreBorderColors = true
 	end
 
 	if(texture) then
@@ -666,16 +675,21 @@ function B:UpdateKeySlot(slotID)
 
 		if questId and not isActiveQuest then
 			slot:SetBackdropBorderColor(1.0, 1.0, 0.0);
+			slot.ignoreBorderColors = true
 			slot.questIcon:Show();
 		elseif questId or isQuestItem then
 			slot:SetBackdropBorderColor(1.0, 0.3, 0.3);
+			slot.ignoreBorderColors = true
 		elseif slot.rarity and slot.rarity > 1 then
 			slot:SetBackdropBorderColor(r, g, b);
+			slot.ignoreBorderColors = true
 		else
 			slot:SetBackdropBorderColor(unpack(E.media.bordercolor));
+			slot.ignoreBorderColors = true
 		end
 	else
 		slot:SetBackdropBorderColor(unpack(E.media.bordercolor));
+		slot.ignoreBorderColors = true
 	end
 
 	if(texture) then
@@ -973,13 +987,13 @@ function B:ContructContainerFrame(name, isBank)
 		f.sortButton:SetSize(16 + E.Border, 16 + E.Border);
 		f.sortButton:SetTemplate();
 		f.sortButton:SetPoint("RIGHT", f.bagText, "LEFT", -5, E.Border * 2);
-		f.sortButton:SetNormalTexture("Interface\\ICONS\\INV_Pet_RatCage");
+		f.sortButton:SetNormalTexture("Interface\\AddOns\\ElvUI\\media\\textures\\INV_Pet_Broom")
 		f.sortButton:GetNormalTexture():SetTexCoord(unpack(E.TexCoords));
 		f.sortButton:GetNormalTexture():SetInside();
-		f.sortButton:SetPushedTexture("Interface\\ICONS\\INV_Pet_RatCage");
+		f.sortButton:SetPushedTexture("Interface\\AddOns\\ElvUI\\media\\textures\\INV_Pet_Broom")
 		f.sortButton:GetPushedTexture():SetTexCoord(unpack(E.TexCoords));
 		f.sortButton:GetPushedTexture():SetInside();
-		f.sortButton:SetDisabledTexture("Interface\\ICONS\\INV_Pet_RatCage");
+		f.sortButton:SetDisabledTexture("Interface\\AddOns\\ElvUI\\media\\textures\\INV_Pet_Broom")
 		f.sortButton:GetDisabledTexture():SetTexCoord(unpack(E.TexCoords));
 		f.sortButton:GetDisabledTexture():SetInside();
 		f.sortButton:GetDisabledTexture():SetDesaturated(true);
@@ -1084,13 +1098,13 @@ function B:ContructContainerFrame(name, isBank)
 		f.sortButton:SetSize(16 + E.Border, 16 + E.Border);
 		f.sortButton:SetTemplate();
 		f.sortButton:SetPoint("RIGHT", f.goldText, "LEFT", -5, E.Border * 2);
-		f.sortButton:SetNormalTexture("Interface\\ICONS\\INV_Pet_RatCage");
+		f.sortButton:SetNormalTexture("Interface\\AddOns\\ElvUI\\media\\textures\\INV_Pet_Broom")
 		f.sortButton:GetNormalTexture():SetTexCoord(unpack(E.TexCoords));
 		f.sortButton:GetNormalTexture():SetInside();
-		f.sortButton:SetPushedTexture("Interface\\ICONS\\INV_Pet_RatCage");
+		f.sortButton:SetPushedTexture("Interface\\AddOns\\ElvUI\\media\\textures\\INV_Pet_Broom")
 		f.sortButton:GetPushedTexture():SetTexCoord(unpack(E.TexCoords));
 		f.sortButton:GetPushedTexture():SetInside();
-		f.sortButton:SetDisabledTexture("Interface\\ICONS\\INV_Pet_RatCage");
+		f.sortButton:SetDisabledTexture("Interface\\AddOns\\ElvUI\\media\\textures\\INV_Pet_Broom")
 		f.sortButton:GetDisabledTexture():SetTexCoord(unpack(E.TexCoords));
 		f.sortButton:GetDisabledTexture():SetInside();
 		f.sortButton:GetDisabledTexture():SetDesaturated(true);

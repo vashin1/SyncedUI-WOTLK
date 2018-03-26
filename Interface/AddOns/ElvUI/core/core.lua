@@ -17,6 +17,7 @@ local GetTalentTabInfo = GetTalentTabInfo;
 local InCombatLockdown = InCombatLockdown;
 local IsAddOnLoaded = IsAddOnLoaded;
 local IsInInstance, GetNumPartyMembers, GetNumRaidMembers = IsInInstance, GetNumPartyMembers, GetNumRaidMembers;
+local IsSpellKnown = IsSpellKnown
 local RequestBattlefieldScoreData = RequestBattlefieldScoreData;
 local SendAddonMessage = SendAddonMessage;
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
@@ -330,74 +331,86 @@ end
 
 function E:UpdateFrameTemplates()
 	for frame in pairs(self["frames"]) do
-		if(frame and frame.template) then
-			frame:SetTemplate(frame.template, frame.glossTex);
+		if frame and frame.template and not frame.ignoreUpdates then
+			if not frame.ignoreFrameTemplates then
+				frame:SetTemplate(frame.template, frame.glossTex)
+			end
 		else
-			self["frames"][frame] = nil;
+			self["frames"][frame] = nil
 		end
 	end
 
 	for frame in pairs(self["unitFrameElements"]) do
 		if frame and frame.template and not frame.ignoreUpdates then
-			frame:SetTemplate(frame.template, frame.glossTex);
+			if not frame.ignoreFrameTemplates then
+				frame:SetTemplate(frame.template, frame.glossTex)
+			end
 		else
-			self["unitFrameElements"][frame] = nil;
+			self["unitFrameElements"][frame] = nil
 		end
 	end
 end
 
 function E:UpdateBorderColors()
-	for frame in pairs(self["frames"]) do
-		if(frame) then
-			if(frame.template == "Default" or frame.template == "Transparent" or frame.template == nil) then
-				frame:SetBackdropBorderColor(unpack(self["media"].bordercolor));
+	for frame, _ in pairs(self["frames"]) do
+		if frame and not frame.ignoreUpdates then
+			if not frame.ignoreBorderColors then
+				if frame.template == "Default" or frame.template == "Transparent" or frame.template == nil then
+					frame:SetBackdropBorderColor(unpack(self["media"].bordercolor))
+				end
 			end
 		else
-			self["frames"][frame] = nil;
+			self["frames"][frame] = nil
 		end
 	end
 
-	for frame in pairs(self["unitFrameElements"]) do
+	for frame, _ in pairs(self["unitFrameElements"]) do
 		if frame and not frame.ignoreUpdates then
-			if frame.template == "Default" or frame.template == "Transparent" or frame.template == nil then
-				frame:SetBackdropBorderColor(unpack(self["media"].unitframeBorderColor))
+			if not frame.ignoreBorderColors then
+				if frame.template == "Default" or frame.template == "Transparent" or frame.template == nil then
+					frame:SetBackdropBorderColor(unpack(self["media"].unitframeBorderColor))
+				end
 			end
 		else
-			self["unitFrameElements"][frame] = nil;
+			self["unitFrameElements"][frame] = nil
 		end
 	end
 end
 
 function E:UpdateBackdropColors()
 	for frame, _ in pairs(self["frames"]) do
-		if(frame) then
-			if(frame.template == "Default" or frame.template == nil) then
-				if(frame.backdropTexture) then
-					frame.backdropTexture:SetVertexColor(unpack(self["media"].backdropcolor));
-				else
-					frame:SetBackdropColor(unpack(self["media"].backdropcolor));
+		if frame then
+			if not frame.ignoreBackdropColors then
+				if frame.template == "Default" or frame.template == nil then
+					if frame.backdropTexture then
+						frame.backdropTexture:SetVertexColor(unpack(self["media"].backdropcolor))
+					else
+						frame:SetBackdropColor(unpack(self["media"].backdropcolor))
+					end
+				elseif frame.template == "Transparent" then
+					frame:SetBackdropColor(unpack(self["media"].backdropfadecolor))
 				end
-			elseif(frame.template == "Transparent") then
-				frame:SetBackdropColor(unpack(self["media"].backdropfadecolor));
 			end
 		else
-			self["frames"][frame] = nil;
+			self["frames"][frame] = nil
 		end
 	end
 
 	for frame, _ in pairs(self["unitFrameElements"]) do
 		if frame then
-			if frame.template == "Default" or frame.template == nil then
-				if frame.backdropTexture then
-					frame.backdropTexture:SetVertexColor(unpack(self["media"].backdropcolor))
-				else
-					frame:SetBackdropColor(unpack(self["media"].backdropcolor))
+			if not frame.ignoreBackdropColors then
+				if frame.template == "Default" or frame.template == nil then
+					if frame.backdropTexture then
+						frame.backdropTexture:SetVertexColor(unpack(self["media"].backdropcolor))
+					else
+						frame:SetBackdropColor(unpack(self["media"].backdropcolor))
+					end
+				elseif frame.template == "Transparent" then
+					frame:SetBackdropColor(unpack(self["media"].backdropfadecolor))
 				end
-			elseif frame.template == "Transparent" then
-				frame:SetBackdropColor(unpack(self["media"].backdropfadecolor))
 			end
 		else
-			self["unitFrameElements"][frame] = nil;
+			self["unitFrameElements"][frame] = nil
 		end
 	end
 end
@@ -506,7 +519,7 @@ function E:CheckRole()
 	end
 
 	if E.myclass == "SHAMAN" then
-		if talentTree == 3 then
+		if talentTree == 3 and IsSpellKnown(51886) then
 			self.DispelClasses[self.myclass].Curse = true
 		else
 			self.DispelClasses[self.myclass].Curse = false

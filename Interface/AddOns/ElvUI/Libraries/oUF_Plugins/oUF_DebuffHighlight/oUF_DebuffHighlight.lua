@@ -2,16 +2,17 @@ local _, ns = ...
 local oUF = oUF or ns.oUF
 if not oUF then return end
 
+local IsSpellKnown = IsSpellKnown
 local UnitAura = UnitAura
 local UnitCanAssist = UnitCanAssist
 
 local playerClass = select(2, UnitClass("player"))
 local CanDispel = {
-	PRIEST = { Magic = true, Disease = true, },
-	SHAMAN = { Poison = true, Disease = true, Curse = true, },
-	PALADIN = { Magic = true, Poison = true, Disease = true, },
-	MAGE = { Curse = true, },
-	DRUID = { Curse = true, Poison = true, }
+	PRIEST = {Magic = true, Disease = true},
+	SHAMAN = {Poison = true, Disease = true, Curse = false},
+	PALADIN = {Magic = true, Poison = true, Disease = true},
+	MAGE = {Curse = true},
+	DRUID = {Curse = true, Poison = true}
 }
 
 local dispellist = CanDispel[playerClass] or {}
@@ -34,6 +35,16 @@ local function GetDebuffType(unit, filter, filterTable)
 			return debufftype, texture;
 		end
 		i = i + 1
+	end
+end
+
+local function CheckSpec(self, event, levels)
+	if(event == "CHARACTER_POINTS_CHANGED" and levels > 0) then return end
+
+	if(IsSpellKnown(51886)) then
+		dispellist.Curse = true
+	else
+		dispellist.Curse = false
 	end
 end
 
@@ -70,6 +81,10 @@ local function Update(object, event, unit)
 			object.DebuffHighlight:SetVertexColor(0, 0, 0, 0);
 		end
 	end
+
+	if object.DebuffHighlight.PostUpdate then
+		object.DebuffHighlight:PostUpdate(object, debuffType, texture, wasFiltered, style, color)
+	end
 end
 
 local function Enable(object)
@@ -85,11 +100,20 @@ local function Enable(object)
 	-- make sure aura scanning is active for this object
 	object:RegisterEvent("UNIT_AURA", Update)
 
+	if(playerClass == "SHAMAN") then
+		object:RegisterEvent("PLAYER_TALENT_UPDATE", CheckSpec)
+		object:RegisterEvent("CHARACTER_POINTS_CHANGED", CheckSpec)
+	end
 	return true
 end
 
 local function Disable(object)
 	object:UnregisterEvent("UNIT_AURA", Update)
+
+	if(playerClass == "SHAMAN") then
+		object:UnregisterEvent("PLAYER_TALENT_UPDATE", CheckSpec)
+		object:UnregisterEvent("CHARACTER_POINTS_CHANGED", CheckSpec)
+	end
 
 	if(object.DBHGlow) then
 		object.DBHGlow:Hide();

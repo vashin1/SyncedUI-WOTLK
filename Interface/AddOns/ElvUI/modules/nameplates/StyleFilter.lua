@@ -78,7 +78,7 @@ function mod:StyleFilterCooldownCheck(names, mustHaveAll)
 	end
 end
 
-function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderChanged, FlashingHealth, TextureChanged, ScaleChanged, AlphaChanged, NameColorChanged, NameOnlyChanged, VisibilityChanged, FrameLevelChanged)
+function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderChanged, FlashingHealth, TextureChanged, ScaleChanged, FrameLevelChanged, AlphaChanged, NameColorChanged, NameOnlyChanged, VisibilityChanged)
 	if VisibilityChanged then
 		frame.StyleChanged = true
 		frame.VisibilityChanged = true
@@ -166,7 +166,7 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 	end
 end
 
-function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, FlashingHealth, TextureChanged, ScaleChanged, AlphaChanged, NameColorChanged, NameOnlyChanged, VisibilityChanged, FrameLevelChanged)
+function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, FlashingHealth, TextureChanged, ScaleChanged, FrameLevelChanged, AlphaChanged, NameColorChanged, NameOnlyChanged, VisibilityChanged)
 	frame.StyleChanged = nil
 	if VisibilityChanged then
 		frame.VisibilityChanged = nil
@@ -238,6 +238,7 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger, failed)
 	local condition, name, inCombat, reaction, spell;
 	local _, instanceType, instanceDifficulty;
 	local level, myLevel, curLevel, minLevel, maxLevel, matchMyLevel, myRole;
+	local power, maxPower, percPower, underPowerThreshold, overPowerThreshold
 	local health, maxHealth, percHealth, underHealthThreshold, overHealthThreshold;
 
 	local castbarShown = frame.CastBar:IsShown()
@@ -263,16 +264,16 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger, failed)
 	--Try to match by casting spell name or spell id
 	if not failed and (trigger.casting and trigger.casting.spells) and next(trigger.casting.spells) then
 		condition = 0
-		for name, value in pairs(trigger.casting.spells) do
+		for spellName, value in pairs(trigger.casting.spells) do
 			if value == true then --only check spell that are checked
 				condition = 1
 				if castbarShown then
 					spell = frame.CastBar.Name:GetText() --Make sure we can check spell name
 					if spell and spell ~= "" and spell ~= FAILED and spell ~= INTERRUPTED then
-						if tonumber(name) then
-							name = GetSpellInfo(name)
+						if tonumber(spellName) then
+							spellName = GetSpellInfo(spellName)
 						end
-						if name and name == spell then
+						if spellName and spellName == spell then
 							condition = 2
 							break
 						end
@@ -305,6 +306,20 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger, failed)
 		underHealthThreshold = trigger.underHealthThreshold and (trigger.underHealthThreshold ~= 0) and (trigger.underHealthThreshold > percHealth)
 		overHealthThreshold = trigger.overHealthThreshold and (trigger.overHealthThreshold ~= 0) and (trigger.overHealthThreshold < percHealth)
 		if underHealthThreshold or overHealthThreshold then
+			condition = true
+		end
+		failed = not condition
+	end
+
+	--Try to match by power conditions
+	if not failed and trigger.powerThreshold then
+		condition = false
+		power = (trigger.powerThreshold and UnitPower("player")) or 0
+		maxPower = (trigger.powerThreshold and UnitPowerMax("player")) or 0
+		percPower = (maxPower and (maxPower > 0) and power/maxPower) or 0
+		underPowerThreshold = trigger.underPowerThreshold and (trigger.underPowerThreshold ~= 0) and (trigger.underPowerThreshold > percPower)
+		overPowerThreshold = trigger.overPowerThreshold and (trigger.overPowerThreshold ~= 0) and (trigger.overPowerThreshold < percPower)
+		if underPowerThreshold or overPowerThreshold then
 			condition = true
 		end
 		failed = not condition
@@ -466,17 +481,17 @@ function mod:StyleFilterPass(frame, actions, castbarTriggered)
 		(healthBarShown and actions.flash and actions.flash.enable and frame.FlashTexture), --FlashingHealth
 		(healthBarShown and actions.texture and actions.texture.enable), --TextureChanged
 		(healthBarShown and actions.scale and actions.scale ~= 1), --ScaleChanged
+		(actions.frameLevel and actions.frameLevel ~= 0), --FrameLevelChanged
 		(actions.alpha and actions.alpha ~= -1), --AlphaChanged
 		(actions.color and actions.color.name), --NameColorChanged
 		(actions.nameOnly), --NameOnlyChanged
-		(actions.hide), --VisibilityChanged
-		(actions.frameLevel and actions.frameLevel ~= 0) --FrameLevelChanged
+		(actions.hide) --VisibilityChanged
 	)
 end
 
 function mod:ClearStyledPlate(frame)
 	if frame.StyleChanged then
-		self:StyleFilterClearChanges(frame, frame.HealthColorChanged, frame.BorderChanged, frame.FlashingHealth, frame.TextureChanged, frame.ScaleChanged, frame.AlphaChanged, frame.NameColorChanged, frame.NameOnlyChanged, frame.VisibilityChanged, frame.FrameLevelChanged)
+		self:StyleFilterClearChanges(frame, frame.HealthColorChanged, frame.BorderChanged, frame.FlashingHealth, frame.TextureChanged, frame.ScaleChanged, frame.FrameLevelChanged, frame.AlphaChanged, frame.NameColorChanged, frame.NameOnlyChanged, frame.VisibilityChanged)
 	end
 end
 
@@ -523,6 +538,15 @@ function mod:StyleFilterConfigureEvents()
 					self.StyleFilterEvents["UNIT_HEALTH_FREQUENT"] = true
 				end
 
+				if filter.triggers.powerThreshold then
+					self.StyleFilterEvents["UNIT_MANA"] = true
+					self.StyleFilterEvents["UNIT_ENERGY"] = true
+					self.StyleFilterEvents["UNIT_FOCUS"] = true
+					self.StyleFilterEvents["UNIT_RAGE"] = true
+					self.StyleFilterEvents["UNIT_RUNIC_POWER"] = true
+					self.StyleFilterEvents["UNIT_DISPLAYPOWER"] = true
+				end
+
 				if next(filter.triggers.names) then
 					for _, value in pairs(filter.triggers.names) do
 						if value == true then
@@ -533,7 +557,8 @@ function mod:StyleFilterConfigureEvents()
 				end
 
 				if filter.triggers.inCombat or filter.triggers.outOfCombat or filter.triggers.inCombatUnit or filter.triggers.outOfCombatUnit then
-					self.StyleFilterEvents["UNIT_THREAT_LIST_UPDATE"] = true
+					self.StyleFilterEvents["PLAYER_REGEN_DISABLED"] = true
+					self.StyleFilterEvents["PLAYER_REGEN_ENABLED"] = true
 				end
 
 				if next(filter.triggers.cooldowns.names) then

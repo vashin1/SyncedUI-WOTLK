@@ -7,6 +7,7 @@ local floor, abs = math.floor, math.abs
 
 local GetTime = GetTime
 local GetSpellInfo = GetSpellInfo
+local IsSpellKnown = IsSpellKnown
 local UnitAura = UnitAura
 
 local addon = {}
@@ -59,6 +60,8 @@ function addon:ResetDebuffData()
 	wipe(debuff_data)
 end
 
+local playerClass = select(2, UnitClass("player"))
+
 local DispellColor = {
 	["Magic"] = {.2, .6, 1},
 	["Curse"] = {.6, 0, 1},
@@ -83,7 +86,7 @@ do
 		["SHAMAN"] = {
 			["Poison"] = true,
 			["Disease"] = true,
-			["Curse"] = true
+			["Curse"] = false
 		},
 		["PALADIN"] = {
 			["Poison"] = true,
@@ -99,7 +102,17 @@ do
 		}
 	}
 
-	DispellFilter = dispellClasses[select(2, UnitClass("player"))] or {}
+	DispellFilter = dispellClasses[playerClass] or {}
+end
+
+local function CheckSpec(self, event, levels)
+	if(event == "CHARACTER_POINTS_CHANGED" and levels > 0) then return end
+
+	if(IsSpellKnown(51886)) then
+		DispellFilter.Curse = true
+	else
+		DispellFilter.Curse = false
+	end
 end
 
 local function formatTime(s)
@@ -254,6 +267,12 @@ end
 local function Enable(self)
 	if self.RaidDebuffs then
 		self:RegisterEvent("UNIT_AURA", Update)
+
+		if(playerClass == "SHAMAN") then
+			self:RegisterEvent("PLAYER_TALENT_UPDATE", CheckSpec)
+			self:RegisterEvent("CHARACTER_POINTS_CHANGED", CheckSpec)
+		end
+
 		return true
 	end
 end
@@ -261,6 +280,12 @@ end
 local function Disable(self)
 	if self.RaidDebuffs then
 		self:UnregisterEvent("UNIT_AURA", Update)
+
+		if(playerClass == "SHAMAN") then
+			self:UnregisterEvent("PLAYER_TALENT_UPDATE", CheckSpec)
+			self:UnregisterEvent("CHARACTER_POINTS_CHANGED", CheckSpec)
+		end
+
 		self.RaidDebuffs:Hide()
 	end
 end

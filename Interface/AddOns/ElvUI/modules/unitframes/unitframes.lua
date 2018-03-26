@@ -205,6 +205,7 @@ end
 
 
 function UF:Construct_UF(frame, unit)
+	frame:SetFrameStrata("LOW")
 	frame:SetScript("OnEnter", UnitFrame_OnEnter)
 	frame:SetScript("OnLeave", UnitFrame_OnLeave)
 
@@ -217,6 +218,7 @@ function UF:Construct_UF(frame, unit)
 	end
 
 	frame.SHADOW_SPACING = 3
+	frame.HAPPINESS_WIDTH = 0
 	frame.CLASSBAR_YOFFSET = 0 --placeholder
 	frame.BOTTOM_OFFSET = 0 --placeholder
 
@@ -350,12 +352,16 @@ function UF:UpdateColors()
 	ElvUF.colors.reaction[6] = good;
 	ElvUF.colors.reaction[7] = good;
 	ElvUF.colors.reaction[8] = good;
-	ElvUF.colors.smooth = {1, 0, 0,
-	1, 1, 0,
-	unpack(E:GetColorTable(db.health))}
+	ElvUF.colors.smooth = {1, 0, 0, 1, 1, 0, unpack(E:GetColorTable(db.health))}
 
 	ElvUF.colors.castColor = E:GetColorTable(db.castColor);
 	ElvUF.colors.castNoInterrupt = E:GetColorTable(db.castNoInterrupt);
+
+	ElvUF.colors.DebuffHighlight = {}
+	ElvUF.colors.DebuffHighlight["Magic"] = E:GetColorTable(db.debuffHighlight.Magic)
+	ElvUF.colors.DebuffHighlight["Curse"] = E:GetColorTable(db.debuffHighlight.Curse)
+	ElvUF.colors.DebuffHighlight["Disease"] = E:GetColorTable(db.debuffHighlight.Disease)
+	ElvUF.colors.DebuffHighlight["Poison"] = E:GetColorTable(db.debuffHighlight.Poison)
 end
 
 function UF:Update_StatusBars()
@@ -704,6 +710,7 @@ function UF:CreateHeader(parent, groupFilter, overrideName, template, groupName,
 
 	header.groupName = group
 	header:SetParent(parent)
+	header:SetFrameStrata("LOW")
 	--header:Show()
 
 	for k, v in pairs(self.headerPrototype) do
@@ -741,6 +748,7 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 
 		if db.numGroups then
 			self[group] = CreateFrame("Frame", "ElvUF_"..stringTitle, E.UIParent, "SecureHandlerStateTemplate");
+			self[group]:SetFrameStrata("LOW")
 			self[group]:Hide()
 			self[group].groups = {}
 			self[group].groupName = group

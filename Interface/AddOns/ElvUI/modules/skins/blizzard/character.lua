@@ -409,8 +409,10 @@ local function LoadSkin()
 
 	ReputationDetailFrame:StripTextures()
 	ReputationDetailFrame:SetTemplate("Transparent")
+	ReputationDetailFrame:Point("TOPLEFT", ReputationFrame, "TOPRIGHT", -32, -12)
 
 	S:HandleCloseButton(ReputationDetailCloseButton)
+	ReputationDetailCloseButton:Point("TOPRIGHT", 3, 4)
 
 	S:HandleCheckBox(ReputationDetailAtWarCheckBox)
 	ReputationDetailAtWarCheckBox:SetCheckedTexture("Interface\\Buttons\\UI-CheckBox-SwordCheck")
@@ -419,16 +421,15 @@ local function LoadSkin()
 
 	SkillFrame:StripTextures(true)
 
-	SkillDetailStatusBarUnlearnButton:StripTextures()
-	SkillDetailStatusBarUnlearnButton:Point("LEFT", SkillDetailStatusBarBorder, "RIGHT", 5, -4)
-
-	SkillDetailStatusBarUnlearnButton.texture = SkillDetailStatusBarUnlearnButton:CreateTexture(nil, "OVERLAY")
-	SkillDetailStatusBarUnlearnButton.texture:SetTexture("Interface\\Buttons\\UI-GroupLoot-Pass-Up")
-	SkillDetailStatusBarUnlearnButton.texture:Point("TOPLEFT", 2, 3)
-	SkillDetailStatusBarUnlearnButton.texture:Point("BOTTOMRIGHT", -2, 6)
+	S:HandleNextPrevButton(SkillDetailStatusBarUnlearnButton)
+	S:SquareButton_SetIcon(SkillDetailStatusBarUnlearnButton, "DELETE")
+	SkillDetailStatusBarUnlearnButton:Size(24)
+	SkillDetailStatusBarUnlearnButton:Point("LEFT", SkillDetailStatusBarBorder, "RIGHT", 5, 0)
+	SkillDetailStatusBarUnlearnButton:SetHitRectInsets(0, 0, 0, 0)
 
 	SkillFrameExpandButtonFrame:StripTextures()
 
+	SkillFrameCollapseAllButton:Point("LEFT", SkillFrameExpandTabLeft, "RIGHT", -40, -3)
 	SkillFrameCollapseAllButton:SetNormalTexture("")
 	SkillFrameCollapseAllButton.SetNormalTexture = E.noop
 	SkillFrameCollapseAllButton:SetHighlightTexture(nil)
