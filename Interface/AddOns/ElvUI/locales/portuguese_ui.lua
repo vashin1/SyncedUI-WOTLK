@@ -38,8 +38,7 @@ L["Reset Position"] = "Redefinir Posição"
 L["Sort Bags"] = "Organizar Bolsas"
 L["Temporary Move"] = "Mover Temporariamente"
 L["Toggle Bags"] = "Mostrar/Ocultar Bolsas"
-L["Toggle Key"] = true;
-L["Vendor Grays"] = "Vender Itens Cinzentos"
+L["Vendor / Delete Grays"] = true
 
 --Chat
 L["AFK"] = "LDT"
@@ -280,7 +279,7 @@ L["Confused.. Try Again!"] = "Confuso... Tente novamente!"
 L["No gray items to delete."] = "Nenhum item cinzento para destruir."
 L["The spell '%s' has been added to the Blacklist unitframe aura filter."] = "O feitiço '%s' foi adicionado à Lista Negra dos filtros das auras de unidades."
 L["This setting caused a conflicting anchor point, where '%s' would be attached to itself. Please check your anchor points. Setting '%s' to be attached to '%s'."] = true;
-L["Vendored gray items for:"] = "Vendeu os itens cinzentos por:"
+L["Vendored gray items for: %s"] = "Vendeu os itens cinzentos por: %s"
 L["You don't have enough money to repair."] = "Você não tem dinheiro suficiente para reparar."
 L["You must be at a vendor."] = "Tem de estar num vendedor."
 L["Your items have been repaired for: "] = "Seus itens foram reparadas por: "
@@ -289,15 +288,16 @@ L["|cFFE30000Lua error recieved. You can view the error message when you exit co
 
 --Static Popups
 L["A setting you have changed will change an option for this character only. This setting that you have changed will be uneffected by changing user profiles. Changing this setting requires that you reload your User Interface."] = "A definição que você alterou afetará apenas este personagem. Esta definição que você alterou não será afetada por mudanças de perfil. Alterar esta difinição requer que você recarregue a sua interface."
+L["Accepting this will reset the UnitFrame settings for %s. Are you sure?"] = true
 L["Accepting this will reset your Filter Priority lists for all auras on NamePlates. Are you sure?"] = true
 L["Accepting this will reset your Filter Priority lists for all auras on UnitFrames. Are you sure?"] = true
 L["Are you sure you want to apply this font to all ElvUI elements?"] = true;
-L["Are you sure you want to delete all your gray items?"] = "Tem a certeza de que deseja destruir todos os seus itens cinzentos?"
 L["Are you sure you want to disband the group?"] = "Tem a certeza de que quer dissolver o grupo?"
 L["Are you sure you want to reset all the settings on this profile?"] = "Tem certeza que quer redefinir todas as configurações desse perfil?"
 L["Are you sure you want to reset every mover back to it's default position?"] = "Tem a certeza de que deseja restaurar todos os movedores de volta para a sua posição padrão?"
 L["Because of the mass confusion caused by the new aura system I've implemented a new step to the installation process. This is optional. If you like how your auras are setup go to the last step and click finished to not be prompted again. If for some reason you are prompted repeatedly please restart your game."] = "Devido à grande confusão causada pelo novo sistema de auras foi implementado um novo passo no processo de instalação. Este passo é opcional, se você gosta da maneira que as suas auras estão configuradas vá para o último passo e clique em Terminado para não ser solicitado a configurar este passo novamente. Se por algum motivo for repetidamente solicitado a fazê-lo, por favor reinicie o seu jogo."
 L["Can't buy anymore slots!"] = "Não é possível comprar mais espaços!"
+L["Delete gray items?"] = true
 L["Disable Warning"] = "Desativar Aviso"
 L["Discard"] = "Descartar"
 L["Do you enjoy the new ElvUI?"] = true;
@@ -305,6 +305,7 @@ L["Do you swear not to post in technical support about something not working wit
 L["ElvUI is five or more revisions out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI/"] = true;
 L["ElvUI is out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI/"] = true;
 L["ElvUI needs to perform database optimizations please be patient."] = true;
+L["Error resetting UnitFrame."] = true
 L["Hover your mouse over any actionbutton or spellbook button to bind it. Press the escape key or right click to clear the current actionbutton's keybinding."] = "Paire com o seu rato (mouse) sobre qualquer botão de ação ou botão do grimório para fazer uma Ligação. Pressione a tecla Escape ou clique com o botão direito para limpar o atalho atual."
 L["I Swear"] = "Eu Juro"
 L["No, Revert Changes!"] = true;

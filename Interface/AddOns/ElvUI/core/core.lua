@@ -25,12 +25,13 @@ local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT;
 local MAX_TALENT_TABS = MAX_TALENT_TABS;
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 
-E.myclass = select(2, UnitClass("player")); -- Constants
-E.myrace = select(2, UnitRace("player"));
-E.myfaction = select(2, UnitFactionGroup("player"));
-E.myname = UnitName("player");
-E.version = GetAddOnMetadata("ElvUI", "Version");
-E.myrealm = GetRealmName();
+-- Constants
+E.myfaction, E.myLocalizedFaction = UnitFactionGroup("player")
+E.myLocalizedClass, E.myclass, E.myClassID = UnitClass("player")
+E.myLocalizedRace, E.myrace = UnitRace("player")
+E.myname = UnitName("player")
+E.myrealm = GetRealmName()
+E.version = GetAddOnMetadata("ElvUI", "Version")
 E.wowbuild = select(2, GetBuildInfo()); E.wowbuild = tonumber(E.wowbuild);
 E.resolution = GetCVar("gxResolution");
 E.screenheight = tonumber(match(E.resolution, "%d+x(%d+)"));
@@ -130,14 +131,10 @@ E.ClassRole = {
 	}
 }
 
-E.DEFAULT_FILTER = {
-	["CCDebuffs"] = "Whitelist",
-	["TurtleBuffs"] = "Whitelist",
-	["PlayerBuffs"] = "Whitelist",
-	["Blacklist"] = "Blacklist",
-	["Whitelist"] = "Whitelist",
-	["RaidDebuffs"] = "Whitelist",
-}
+E.DEFAULT_FILTER = {}
+for filter, tbl in pairs(G.unitframe.aurafilters) do
+	E.DEFAULT_FILTER[filter] = tbl.type
+end
 
 E.noop = function() end;
 
@@ -841,7 +838,7 @@ function E:UpdateAll(ignoreInstall)
 
 	self:SetMoversPositions();
 	self:UpdateMedia();
-	self:UpdateCooldownSettings();
+	self:UpdateCooldownSettings("all")
 
 	local UF = self:GetModule("UnitFrames")
 	UF.db = self.db.unitframe;
@@ -1112,6 +1109,16 @@ function E:DBConversions()
 		E.db.unitframe.units.player.RestIcon.enable = E.db.unitframe.units.player.restIcon
 		E.db.unitframe.units.player.restIcon = nil
 	end
+
+	--Convert old "Buffs and Debuffs" font size option to individual options
+	if E.db.auras.fontSize then
+		local fontSize = E.db.auras.fontSize
+		E.db.auras.buffs.countFontSize = fontSize
+		E.db.auras.buffs.durationFontSize = fontSize
+		E.db.auras.debuffs.countFontSize = fontSize
+		E.db.auras.debuffs.durationFontSize = fontSize
+		E.db.auras.fontSize = nil
+	end
 end
 
 local CPU_USAGE = {};
@@ -1206,7 +1213,7 @@ function E:Initialize()
 	self:LoadCommands();
 	self:InitializeModules();
 	self:LoadMovers();
-	self:UpdateCooldownSettings();
+	self:UpdateCooldownSettings("all")
 	self.initialized = true;
 
 	if(self.private.install_complete == nil) then
@@ -1223,6 +1230,9 @@ function E:Initialize()
 
 	self:UpdateMedia();
 	self:UpdateFrameTemplates();
+	self:UpdateBorderColors()
+	self:UpdateBackdropColors()
+	self:UpdateStatusBars()
 	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", "CheckRole");
 	self:RegisterEvent("CHARACTER_POINTS_CHANGED", "CheckRole");
 	self:RegisterEvent("UPDATE_FLOATING_CHAT_WINDOWS", "UIScale");

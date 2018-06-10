@@ -72,7 +72,7 @@ end
 function M:AddChatBubbleName(chatBubble, guid, name)
 	if not name then return end
 
-	local defaultColor, color = "ffffffff"
+	local defaultColor, color = "|cffffffff"
 	if guid ~= nil and guid ~= "" then
 		local _, class = GetPlayerInfoByGUID(guid)
 		if class then
@@ -97,7 +97,11 @@ function M:SkinBubble(frame)
 	end
 
 	local name = frame:CreateFontString(nil, "OVERLAY")
-	name:SetPoint("TOPLEFT", 5, 5)
+	if E.private.general.chatBubbles == "backdrop" then
+		name:SetPoint("TOPLEFT", 5, 19)
+	else
+		name:SetPoint("TOPLEFT", 5, 6)
+	end
 	name:SetPoint("BOTTOMRIGHT", frame, "TOPRIGHT", -5, -5)
 	name:SetJustifyH("LEFT")
 	name:FontTemplate(E.LSM:Fetch("font", E.private.general.chatBubbleFont), E.private.general.chatBubbleFontSize * 0.85, E.private.general.chatBubbleFontOutline)

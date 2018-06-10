@@ -312,7 +312,15 @@ function AB:PLAYER_REGEN_ENABLED()
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED");
 end
 
-local function Vehicle_OnEvent(self)
+local vehicle_CallOnEvent -- so we can call the local function inside of itself
+local function Vehicle_OnEvent(self, event)
+	if event == "PLAYER_REGEN_ENABLED" then
+		self:UnregisterEvent(event)
+	elseif InCombatLockdown() then
+		self:RegisterEvent("PLAYER_REGEN_ENABLED", vehicle_CallOnEvent)
+		return
+	end
+
 	if(CanExitVehicle() and not E.db.general.minimap.icons.vehicleLeave.hide) then
 		self:Show();
 		self:GetNormalTexture():SetVertexColor(1, 1, 1);
@@ -321,6 +329,7 @@ local function Vehicle_OnEvent(self)
 		self:Hide();
 	end
 end
+vehicle_CallOnEvent = Vehicle_OnEvent
 
 local function Vehicle_OnClick()
 	VehicleExit();
@@ -805,11 +814,15 @@ end
 LAB.RegisterCallback(AB, "OnButtonUpdate", AB.LAB_ButtonUpdate);
 
 local function Saturate(cooldown)
-	--if not E.private.cooldown.enable then
+	if not E.private.cooldown.enable then
 		cooldown:GetParent().icon:SetDesaturated(false)
-	--else
-	--	cooldown:GetParent():GetParent():GetParent().icon:SetDesaturated(false)
-	--end
+	else
+		if cooldown:GetParent():GetParent():GetParent().icon then
+			cooldown:GetParent():GetParent():GetParent().icon:SetDesaturated(false)
+		else
+			cooldown:GetParent().icon:SetDesaturated(false)
+		end
+	end
 end
 
 local function OnCooldownUpdate(_, button, start, duration)
@@ -823,11 +836,15 @@ local function OnCooldownUpdate(_, button, start, duration)
 		--Hook cooldown done and add colors back
 		if not button.onCooldownDoneHooked then
 			button.onCooldownDoneHooked = true
-			--if not E.private.cooldown.enable then
+			if not E.private.cooldown.enable then
 				AB:HookScript(button.cooldown, "OnHide", Saturate)
-			--else
-			--	AB:HookScript(button.cooldown.timer, "OnHide", Saturate)
-			--end
+			else
+				if button.cooldown.timer then
+					AB:HookScript(button.cooldown.timer, "OnHide", Saturate)
+				else
+					AB:HookScript(button.cooldown, "OnHide", Saturate)
+				end
+			end
 		end
 	end
 end
@@ -849,11 +866,15 @@ function AB:ToggleDesaturation(value)
 			button.saturationLocked = nil
 			button.icon:SetDesaturated(false)
 			if button.onCooldownDoneHooked then
-				--if not E.private.cooldown.enable then
+				if not E.private.cooldown.enable then
 					AB:Unhook(button.cooldown, "OnHide")
-				--else
-				--	AB:Unhook(button.cooldown.timer, "OnHide")
-				--end
+				else
+					if button.cooldown.timer then
+						AB:Unhook(button.cooldown.timer, "OnHide")
+					else
+						AB:Unhook(button.cooldown, "OnHide")
+					end
+				end
 				button.onCooldownDoneHooked = nil
 			end
 		end
