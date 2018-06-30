@@ -1104,7 +1104,7 @@ local function GetOptionsTable_Castbar(hasTicks, updateFunc, groupName, numUnits
 				order = 3,
 				type = "execute",
 				name = L["Show"].." / "..HIDE,
-				func = function() 
+				func = function()
 					local frameName = E:StringTitle(groupName)
 					frameName = "ElvUF_"..frameName
 					frameName = frameName:gsub("t(arget)", "T%1")
@@ -2446,14 +2446,13 @@ E.Options.args.unitframe = {
 								end
 								UF:FrameGlow_UpdateFrames()
 							end,
-							--disabled = function() return not E.db.unitframe.colors.frameGlow.mouseoverGlow.enable end,
-							disabled = true,
+							disabled = function() return not E.db.unitframe.colors.frameGlow.mouseoverGlow.enable end,
 							args = {
 								enable = {
 									order = 1,
 									type = "toggle",
 									name = L["Enable"],
-									--disabled = false
+									disabled = false
 								},
 								texture = {
 									order = 2,
@@ -2485,8 +2484,7 @@ E.Options.args.unitframe = {
 									type = "color",
 									name = COLOR,
 									hasAlpha = true,
-									disabled = true,
-									--disabled = function() return not E.db.unitframe.colors.frameGlow.mouseoverGlow.enable or E.db.unitframe.colors.frameGlow.mouseoverGlow.class end
+									disabled = function() return not E.db.unitframe.colors.frameGlow.mouseoverGlow.enable or E.db.unitframe.colors.frameGlow.mouseoverGlow.class end
 								}
 							}
 						}
@@ -3077,11 +3075,6 @@ E.Options.args.unitframe = {
 							order = 7,
 							type = "toggle",
 							name = L["Party Frames"]
-						},
-						raid = {
-							order = 8,
-							type = "toggle",
-							name = L["Raid Frames"]
 						}
 					}
 				},
@@ -3933,7 +3926,10 @@ E.Options.args.unitframe.args.target = {
 					order = 3,
 					type = "range",
 					name = L["Height"],
-					min = ((E.db.unitframe.thinBorders or E.PixelMode) and 3 or 7), max = 15, step = 1
+					min = ((E.db.unitframe.thinBorders or E.PixelMode) and 3 or 7),
+					max = (E.db.unitframe.units["target"]["combobar"].detachFromFrame and 300 or 30),
+					step = 1,
+					disabled = function() return not E.db.unitframe.units["target"]["combobar"].enable end
 				},
 				fill = {
 					order = 4,
@@ -3942,24 +3938,139 @@ E.Options.args.unitframe.args.target = {
 					values = {
 						["fill"] = L["Filled"],
 						["spaced"] = L["Spaced"]
-					}
+					},
+					disabled = function() return not E.db.unitframe.units["target"]["combobar"].enable end
 				},
 				autoHide = {
 					order = 5,
 					type = "toggle",
-					name = L["Auto-Hide"]
+					name = L["Auto-Hide"],
+					disabled = function() return not E.db.unitframe.units["target"]["combobar"].enable end
 				},
-				detachFromFrame = {
+				spacer = {
 					order = 6,
-					type = "toggle",
-					name = L["Detach From Frame"]
+					type = "description",
+					name = ""
 				},
-				detachedWidth = {
-					order = 7,
-					type = "range",
-					name = L["Detached Width"],
-					disabled = function() return not E.db.unitframe.units["target"]["combobar"].detachFromFrame end,
-					min = 15, max = 450, step = 1
+				detachGroup = {
+					order = 8,
+					type = "group",
+					name = L["Detach From Frame"],
+					get = function(info) return E.db.unitframe.units["target"]["combobar"][ info[#info] ] end,
+					set = function(info, value) E.db.unitframe.units["target"]["combobar"][ info[#info] ] = value UF:CreateAndUpdateUF("target") end,
+					guiInline = true,
+					args = {
+						detachFromFrame = {
+							order = 1,
+							type = "toggle",
+							name = ENABLE,
+							width = "full",
+							set = function(info, value)
+								if value == true then
+									E.Options.args.unitframe.args.target.args.combobar.args.height.max = 300
+								else
+									E.Options.args.unitframe.args.target.args.combobar.args.height.max = 30
+								end
+								E.db.unitframe.units["target"]["combobar"][ info[#info] ] = value
+								UF:CreateAndUpdateUF("target")
+							end,
+							disabled = function() return not E.db.unitframe.units["target"]["combobar"].enable end
+						},
+						detachedWidth = {
+							order = 2,
+							type = "range",
+							name = L["Detached Width"],
+							disabled = function() return not E.db.unitframe.units["target"]["combobar"].detachFromFrame or not E.db.unitframe.units["target"]["combobar"].enable end,
+							min = ((E.db.unitframe.thinBorders or E.PixelMode) and 3 or 7), max = 800, step = 1
+						},
+						orientation = {
+							order = 3,
+							type = "select",
+							name = L["Frame Orientation"],
+							disabled = function()
+								return (E.db.unitframe.units["target"]["combobar"].fill and (E.db.unitframe.units["target"]["combobar"].fill == "fill"))
+								or not E.db.unitframe.units["target"]["combobar"].detachFromFrame
+								or not E.db.unitframe.units["target"]["combobar"].enable
+							end,
+							values = {
+								["HORIZONTAL"] = L["Horizontal"],
+								["VERTICAL"] = L["Vertical"]
+							}
+						},
+						spacer = {
+							order = 4,
+							type = "description",
+							name = ""
+						},
+						spacing = {
+							order = 5,
+							type = "range",
+							name = L["Spacing"],
+							min = ((E.db.unitframe.thinBorders or E.PixelMode) and -1 or -4), max = 20, step = 1,
+							disabled = function() return not E.db.unitframe.units["target"]["combobar"].detachFromFrame or not E.db.unitframe.units["target"]["combobar"].enable end
+						},
+						parent = {
+							order = 6,
+							type = "select",
+							name = L["Parent"],
+							desc = L["Choose UIPARENT to prevent it from hiding with the unitframe."],
+							disabled = function() return not E.db.unitframe.units["target"]["combobar"].detachFromFrame or not E.db.unitframe.units["target"]["combobar"].enable end,
+							values = {
+								["FRAME"] = "FRAME",
+								["UIPARENT"] = "UIPARENT"
+							}
+						},
+						strataAndLevel = {
+							order = 7,
+							type = "group",
+							name = L["Strata and Level"],
+							get = function(info) return E.db.unitframe.units["target"]["combobar"]["strataAndLevel"][ info[#info] ] end,
+							set = function(info, value) E.db.unitframe.units["target"]["combobar"]["strataAndLevel"][ info[#info] ] = value UF:CreateAndUpdateUF("target") end,
+							guiInline = true,
+							disabled = function() return not E.db.unitframe.units["target"]["combobar"].detachFromFrame end,
+							hidden = function() return not E.db.unitframe.units["target"]["combobar"].detachFromFrame end,
+							args = {
+								useCustomStrata = {
+									order = 1,
+									type = "toggle",
+									name = L["Use Custom Strata"],
+									disabled = function() return not E.db.unitframe.units["target"]["combobar"].enable end
+								},
+								frameStrata = {
+									order = 2,
+									type = "select",
+									name = L["Frame Strata"],
+									values = {
+										["BACKGROUND"] = "BACKGROUND",
+										["LOW"] = "LOW",
+										["MEDIUM"] = "MEDIUM",
+										["HIGH"] = "HIGH",
+										["DIALOG"] = "DIALOG",
+										["TOOLTIP"] = "TOOLTIP"
+									},
+									disabled = function() return not E.db.unitframe.units["target"]["combobar"].enable end
+								},
+								spacer = {
+									order = 3,
+									type = "description",
+									name = ""
+								},
+								useCustomLevel = {
+									order = 4,
+									type = "toggle",
+									name = L["Use Custom Level"],
+									disabled = function() return not E.db.unitframe.units["target"]["combobar"].enable end
+								},
+								frameLevel = {
+									order = 5,
+									type = "range",
+									name = L["Frame Level"],
+									min = 2, max = 128, step = 1,
+									disabled = function() return not E.db.unitframe.units["target"]["combobar"].enable end
+								}
+							}
+						}
+					}
 				}
 			}
 		},
@@ -4058,7 +4169,7 @@ E.Options.args.unitframe.args.targettarget = {
 					order = 5,
 					type = "execute",
 					name = L["Show Auras"],
-					func = function() 
+					func = function()
 						local frame = ElvUF_TargetTarget
 						if frame.forceShowAuras then
 							frame.forceShowAuras = nil
@@ -4334,7 +4445,7 @@ E.Options.args.unitframe.args.focus = {
 					order = 5,
 					type = "execute",
 					name = L["Show Auras"],
-					func = function() 
+					func = function()
 						local frame = ElvUF_Focus
 						if frame.forceShowAuras then
 							frame.forceShowAuras = nil
@@ -4814,7 +4925,7 @@ E.Options.args.unitframe.args.pettarget = {
 					order = 5,
 					type = "execute",
 					name = L["Show Auras"],
-					func = function() 
+					func = function()
 						local frame = ElvUF_PetTarget
 						if frame.forceShowAuras then
 							frame.forceShowAuras = nil
@@ -5279,7 +5390,7 @@ E.Options.args.unitframe.args.party = {
 			order = 1,
 			type = "execute",
 			name = L["Display Frames"],
-			func = function() 
+			func = function()
 				UF:HeaderConfig(ElvUF_Party, ElvUF_Party.forceShow ~= true or nil)
 			end
 		},
@@ -5865,7 +5976,7 @@ E.Options.args.unitframe.args.raid = {
 			order = 1,
 			type = "execute",
 			name = L["Display Frames"],
-			func = function() 
+			func = function()
 				UF:HeaderConfig(_G["ElvUF_Raid"], _G["ElvUF_Raid"].forceShow ~= true or nil)
 			end
 		},
@@ -6273,7 +6384,7 @@ E.Options.args.unitframe.args.raid40 = {
 			order = 1,
 			type = "execute",
 			name = L["Display Frames"],
-			func = function() 
+			func = function()
 				UF:HeaderConfig(_G["ElvUF_Raid40"], _G["ElvUF_Raid40"].forceShow ~= true or nil)
 			end
 		},
@@ -6335,7 +6446,7 @@ E.Options.args.unitframe.args.raid40 = {
 					type = "select",
 					name = L["Threat Display Mode"],
 					values = threatValues
-				},	
+				},
 				colorOverride = {
 					order = 7,
 					type = "select",
@@ -6514,7 +6625,7 @@ E.Options.args.unitframe.args.raid40 = {
 							name = L["Invert Grouping Order"],
 							desc = L["Enabling this inverts the grouping order when the raid is not full, this will reverse the direction it starts from."],
 							disabled = function() return not E.db.unitframe.units["raid40"].raidWideSorting end
-						},	
+						},
 						startFromCenter = {
 							order = 6,
 							type = "toggle",
@@ -6735,7 +6846,7 @@ E.Options.args.unitframe.args.raidpet = {
 					type = "select",
 					name = L["Threat Display Mode"],
 					values = threatValues
-				},	
+				},
 				colorOverride = {
 					order = 6,
 					type = "select",
@@ -7146,7 +7257,7 @@ E.Options.args.unitframe.args.tank = {
 					order = 6,
 					type = "execute",
 					name = L["Configure Auras"],
-					func = function() 
+					func = function()
 						if E.db.unitframe.units["tank"]["buffIndicator"].profileSpecific then
 							E:SetToFilterConfig("Buff Indicator (Profile)")
 						else
@@ -7338,7 +7449,7 @@ E.Options.args.unitframe.args.assist = {
 					order = 6,
 					type = "execute",
 					name = L["Configure Auras"],
-					func = function() 
+					func = function()
 						if E.db.unitframe.units["assist"]["buffIndicator"].profileSpecific then
 							E:SetToFilterConfig("Buff Indicator (Profile)")
 						else

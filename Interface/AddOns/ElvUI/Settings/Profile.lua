@@ -729,7 +729,7 @@ P["unitframe"] = {
 				["color"] = {r = 1, g = 1, b = 1, a = 1}
 			},
 			["mouseoverGlow"] = {
-				["enable"] = false,
+				["enable"] = true,
 				["class"] = false,
 				["texture"] = "ElvUI Blank",
 				["color"] = {r = 1, g = 1, b = 1, a = 0.1}
@@ -1050,9 +1050,18 @@ P["unitframe"] = {
 				["enable"] = true,
 				["fill"] = "fill",
 				["height"] = 10,
+				["autoHide"] = true,
 				["detachFromFrame"] = false,
 				["detachedWidth"] = 250,
-				["autoHide"] = true
+				["parent"] = "FRAME",
+				["orientation"] = "HORIZONTAL",
+				["spacing"] = 5,
+				["strataAndLevel"] = {
+					["useCustomStrata"] = false,
+					["frameStrata"] = "LOW",
+					["useCustomLevel"] = false,
+					["frameLevel"] = 1
+				}
 			},
 			["aurabar"] = {
 				["enable"] = true,
@@ -2724,10 +2733,9 @@ P["actionbar"] = {
 
 	["microbar"] = {
 		["enabled"] = false,
-		["Scale"] = 1,
-		["xOffset"] = 1,
-		["yOffset"] = 1,
 		["buttonsPerRow"] = 10,
+		["buttonSize"] = 20,
+		["buttonSpacing"] = 2,
 		["alpha"] = 1,
 		["mouseover"] = false,
 		["visibility"] = "show",
