@@ -73,6 +73,7 @@ local addonList = {
 	"RaidCooldowns",
 	"EventAlert",
 	"WIM",
+	"BigWigs",
 }
 
 AS.addOns = {}
@@ -330,6 +331,39 @@ local function getOptions()
 								name = L["Text yOffset"],
 								desc = L["Offset position for text."],
 								min = -300, max = 300, step = 1
+							}
+						}
+					},
+					bwGroup = {
+						order = 6,
+						type = "group",
+						name = "BigWigs",
+						get = function(info) return E.db.addOnSkins[info[#info]] end,
+						set = function(info, value) E.db.addOnSkins[info[#info]] = value end,
+						disabled = function() return not AS:CheckAddOn("BigWigs") end,
+						args = {
+							bigwigsBarHeight = {
+								order = 1,
+								type = "range",
+								name = "Bar Height",
+								min = 10, max = 40, step = 1
+							},
+							bigwigsFontSize = {
+								order = 2,
+								type = "range",
+								name = L["Font Size"],
+								min = 6, max = 22, step = 1
+							},
+							bigwigsFontOutline = {
+								order = 3,
+								type = "select",
+								name = L["Font Outline"],
+								values = {
+									["NONE"] = L["None"],
+									["OUTLINE"] = "OUTLINE",
+									["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
+									["THICKOUTLINE"] = "THICKOUTLINE"
+								}
 							}
 						}
 					}

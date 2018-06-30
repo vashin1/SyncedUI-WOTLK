@@ -1,17 +1,61 @@
---[[
-Copyright (c) 2009, Hendrik "Nevcairiel" Leppkes < h.leppkes@gmail.com >
-All rights reserved.
-]]
+local E, L, V, P, G = unpack(ElvUI)
+local Fog = E:NewModule("FogofWar", "AceHook-3.0", "AceEvent-3.0")
+local EP = LibStub("LibElvUIPlugin-1.0")
+local addonName = ...
 
-local Mapster = LibStub("AceAddon-3.0"):GetAddon("Mapster")
-local L = LibStub("AceLocale-3.0"):GetLocale("Mapster")
-
-local MODNAME = "FogClear"
-local FogClear = Mapster:NewModule(MODNAME, "AceHook-3.0", "AceEvent-3.0")
-
-local strlen, strsub = string.len, string.sub
+local _G = _G
+local pairs = pairs
 local mod, floor, ceil = math.fmod, math.floor, math.ceil
-local strlower, format = string.lower, string.format
+local twipe, tinsert = table.wipe, table.insert
+
+-- Profile
+P["fogofwar"] = {
+	["enable"] = true,
+	["color"] = {r = 0.5, g = 0.5, b = 0.5, a = 1}
+}
+
+-- Config
+local function ColorizeSettingName(settingName)
+	return format("|cff1784d1%s|r", settingName)
+end
+
+local function InsertOptions()
+	E.Options.args.fogofwar = {
+		type = "group",
+		order = 56,
+		name = ColorizeSettingName(L["Fog of War"]),
+		args = {
+			header = {
+				order = 1,
+				type = "header",
+				name = L["Fog of War"]
+			},
+			enable = {
+				order = 2,
+				type = "toggle",
+				name = L["Enable"],
+				get = function(info) return E.db.fogofwar.enable end,
+				set = function(info, value) E.db.fogofwar.enable = value Fog:UpdateFog() end
+			},
+			overlay = {
+				order = 3,
+				type = "color",
+				name = L["Overlay Color"],
+				hasAlpha = true,
+				get = function(info)
+					local t = E.db.fogofwar.color
+					local d = P.fogofwar.color
+					return t.r, t.g, t.b, t.a, d.r, d.g, d.b, d.a
+				end,
+				set = function(_, r, g, b, a)
+					E.db.fogofwar.color.r, E.db.fogofwar.color.g, E.db.fogofwar.color.b, E.db.fogofwar.color.a = r, g, b, a
+					Fog:UpdateWorldMapOverlays()
+				end,
+				disabled = function() return not E.db.fogofwar.enable end
+			}
+		}
+	}
+end
 
 local errata = {
 	["LochModan"] = {
@@ -1030,192 +1074,35 @@ local errata = {
 		["ArgentTournamentGround"] = 32858407226,
 		["IcecrownCitadel"] = 500774938932,
 	},
-	['*'] = {},
+	['*'] = {}
 }
 
-local db
-local defaults = {
-	profile = {
-		colorR = 1,
-		colorG = 1,
-		colorB = 1,
-		colorA = 1,
-		debug = false
-	},
-	global = {
-		errata = errata,
-	},
-}
+local worldMapCache, discoveredOverlays = {}, {}, {}
 
-local options
+local function UpdateOverlayTextures(_, frame, frameName, textureCache, scale, alphaMod)
+	local mapFileName, textureHeight, _, isMicroDungeon = GetMapInfo()
 
-local function getOptions()
-	if not options then
-		options = {
-			type = "group",
-			name = L["FogClear"],
-			arg = MODNAME,
-			args = {
-				intro = {
-					order = 1,
-					type = "description",
-					name = L["The FogClear module removes the Fog of War from the World map, thus displaying the artwork for all the undiscovered zones, optionally with a color overlay on undiscovered areas."] .. "\n",
-				},
-				enabled = {
-					order = 2,
-					type = "toggle",
-					name = L["Enable FogClear"],
-					get = function() return Mapster:GetModuleEnabled(MODNAME) end,
-					set = function(info, value) Mapster:SetModuleEnabled(MODNAME, value) end,
-				},
-				color = {
-					order = 3,
-					type = "color",
-					name = L["Overlay Color"],
-					get = "GetOverlayColor",
-					set = "SetOverlayColor",
-					handler = FogClear,
-					hasAlpha = true,
-				},
-				nl = {
-					order = 4,
-					type = "description",
-					name = "",
-				},
-				reset = {
-					order = 5,
-					type = "execute",
-					name = L["Reset FogClear Data"],
-					desc = L["FogClear collects new Data in your own SavedVariables, but that data might get corrupted (or simply old) with a new patch. Reset the data if you see corruption in the world map."],
-					func = function() for k,v in pairs(FogClear.db.global.errata) do FogClear.db.global.errata[k] = nil end end,
-				},
-				debug = {
-					order = 6,
-					type = "toggle",
-					name = L["Debug"],
-					desc = L["Turn on debugging for the FogClear Module."],
-					get = function() return db.debug end,
-					set = function(_, value) db.debug = value end,
-				},
-				desc = {
-					order = 7,
-					type = "description",
-					name = L["Note: You need to reload your UI after reseting the data!"],
-				},
-			}
-		}
-	end
-
-	return options
-end
-
-
-function FogClear:OnInitialize()
-	self.db = Mapster.db:RegisterNamespace(MODNAME, defaults)
-	db = self.db.profile
-	self.overlays = self.db.global.errata
-
-	self:SetEnabledState(Mapster:GetModuleEnabled(MODNAME))
-	Mapster:RegisterModuleOptions(MODNAME, getOptions, L["FogClear"])
-end
-
-function FogClear:OnEnable()
-	self:RawHook("GetNumMapOverlays", true)
-	self:RawHook("WorldMapFrame_Update", true)
-
-	if not IsAddOnLoaded("Blizzard_BattlefieldMinimap") then
-		self:RegisterEvent("ADDON_LOADED", function(event, addon)
-			if addon == "Blizzard_BattlefieldMinimap" then
-				FogClear:UnregisterEvent("ADDON_LOADED")
-				FogClear:RawHook("BattlefieldMinimap_Update", true)
-			end
-		end)
-	else
-		self:RawHook("BattlefieldMinimap_Update", true)
-
-		if BattlefieldMinimap:IsShown() then
-			BattlefieldMinimap_Update()
+	if not mapFileName or isMicroDungeon then
+		for i = 1, #textureCache do
+			textureCache[i]:Hide()
 		end
+
+		return
 	end
-
-	if WorldMapFrame:IsShown() then
-		WorldMapFrame_Update()
-	end
-end
-
-function FogClear:OnDisable()
-	self:UnhookAll()
-	local tex
-	for i=1, NUM_WORLDMAP_OVERLAYS do
-		tex = _G[format("WorldMapOverlay%d", i)]
-		tex:SetVertexColor(1,1,1)
-		tex:SetAlpha(1)
-		tex:SetDrawLayer("ARTWORK")
-	end
-	if WorldMapFrame:IsShown() then
-		WorldMapFrame_Update()
-	end
-
-	if BattlefieldMinimap then
-		for i=1, NUM_BATTLEFIELDMAP_OVERLAYS do
-			tex = _G[format("BattlefieldMinimapOverlay%d", i)]
-			tex:SetVertexColor(1,1,1)
-			tex:SetAlpha(1 - BattlefieldMinimapOptions.opacity)
-		end
-		if BattlefieldMinimap:IsShown() then
-			BattlefieldMinimap_Update()
-		end
-	end
-end
-
-function FogClear:Refresh()
-	db = self.db.profile
-	if not self:IsEnabled() then return end
-
-	self:UpdateWorldMapOverlays()
-	self:UpdateBattlefieldMinimapOverlays()
-end
-
-function FogClear:GetNumMapOverlays()
-	if NUM_WORLDMAP_OVERLAYS == 0 then
-		return self.hooks.GetNumMapOverlays()
-	end
-	return 0
-end
-
-function FogClear:RealHasOverlays()
-	local mapFileName = GetMapInfo()
-	if not mapFileName or not self.overlays then return false end
-
-	local overlayMap = self.overlays[mapFileName]
-	if overlayMap and next(overlayMap) then return true end
-end
-
-function FogClear:WorldMapFrame_Update()
-	self.hooks.WorldMapFrame_Update()
-	self:UpdateWorldMapOverlays()
-end
-
-function FogClear:BattlefieldMinimap_Update()
-	self.hooks.BattlefieldMinimap_Update()
-	self:UpdateBattlefieldMinimapOverlays()
-end
-
-local discoveredOverlays = {}
-local function updateOverlayTextures(frame, frameName, scale, alphaMod)
-	local self = FogClear
-	local mapFileName, textureHeight = GetMapInfo()
-	if not mapFileName then return end
 
 	local pathPrefix = "Interface\\WorldMap\\"..mapFileName.."\\"
-	local overlayMap = self.overlays[mapFileName]
-
-	local numOverlays = self.hooks.GetNumMapOverlays()
+	local overlayMap = errata[mapFileName]
+	local numOverlays = GetNumMapOverlays()
 	local pathLen = strlen(pathPrefix) + 1
 
-	for i=1, numOverlays do
+	if not overlayMap then
+		overlayMap = {}
+	end
+
+	for i = 1, numOverlays do
 		local texName, texWidth, texHeight, offsetX, offsetY = GetMapOverlayInfo(i)
-		texName = strsub(texName, pathLen)
+		texName = strsub(texName or "", pathLen)
+
 		local texID = texWidth + texHeight * 2^10 + offsetX * 2^20 + offsetY * 2^30
 		if texID ~= 0 and texID ~= 131200 and texName ~= "" and strlower(texName) ~= "pixelfix" then
 			discoveredOverlays[texName] = texID
@@ -1224,65 +1111,69 @@ local function updateOverlayTextures(frame, frameName, scale, alphaMod)
 	end
 
 	local textureCount = 0
+	local numOv = #textureCache
+	local r, g, b, a = E.db.fogofwar.color.r, E.db.fogofwar.color.g, E.db.fogofwar.color.b, E.db.fogofwar.color.a
 
-	local numOv = (frame == BattlefieldMinimap) and NUM_BATTLEFIELDMAP_OVERLAYS or NUM_WORLDMAP_OVERLAYS
 	for texName, texID in pairs(overlayMap) do
 		local textureName = pathPrefix .. texName
 		local textureWidth, textureHeight, offsetX, offsetY = mod(texID, 2^10), mod(floor(texID / 2^10), 2^10), mod(floor(texID / 2^20), 2^10), floor(texID / 2^30)
-		
 		local numTexturesWide = ceil(textureWidth / 256)
 		local numTexturesTall = ceil(textureHeight / 256)
 		local neededTextures = textureCount + (numTexturesWide * numTexturesTall)
+		local texturePixelWidth, textureFileWidth, texturePixelHeight, textureFileHeight
+
 		if neededTextures > numOv then
 			for j = numOv + 1, neededTextures do
-				frame:CreateTexture(format(frameName, j), "ARTWORK")
+				local texture = frame:CreateTexture(format(frameName, j), "ARTWORK")
+				tinsert(textureCache, texture)
 			end
 			numOv = neededTextures
-			if frame == BattlefieldMinimap then
-				NUM_BATTLEFIELDMAP_OVERLAYS = neededTextures
-			else
-				NUM_WORLDMAP_OVERLAYS = neededTextures
-			end
 		end
+
 		for j = 1, numTexturesTall do
-			local texturePixelHeight
-			local textureFileHeight
 			if j < numTexturesTall then
 				texturePixelHeight = 256
 				textureFileHeight = 256
 			else
 				texturePixelHeight = mod(textureHeight, 256)
+
 				if texturePixelHeight == 0 then
 					texturePixelHeight = 256
 				end
+
 				textureFileHeight = 16
+
 				while textureFileHeight < texturePixelHeight do
 					textureFileHeight = textureFileHeight * 2
 				end
 			end
+
 			for k = 1, numTexturesWide do
 				textureCount = textureCount + 1
-				local texture = _G[format(frameName, textureCount)]
-				local texturePixelWidth
-				local textureFileWidth
+
+				local texture = textureCache[textureCount]
 				if k < numTexturesWide then
 					texturePixelWidth = 256
 					textureFileWidth = 256
 				else
 					texturePixelWidth = mod(textureWidth, 256)
+
 					if texturePixelWidth == 0 then
 						texturePixelWidth = 256
 					end
+
 					textureFileWidth = 16
+
 					while textureFileWidth < texturePixelWidth do
 						textureFileWidth = textureFileWidth * 2
 					end
 				end
-				texture:SetWidth(texturePixelWidth*scale)
-				texture:SetHeight(texturePixelHeight*scale)
+
+				texture:Width(texturePixelWidth*scale)
+				texture:Height(texturePixelHeight*scale)
 				texture:SetTexCoord(0, texturePixelWidth / textureFileWidth, 0, texturePixelHeight / textureFileHeight)
 				texture:ClearAllPoints()
-				texture:SetPoint("TOPLEFT", frame, "TOPLEFT", (offsetX + (256 * (k-1))) * scale, -(offsetY + (256 * (j - 1))) * scale)
+				texture:Point("TOPLEFT", (offsetX + (256 * (k - 1))) * scale, - (offsetY + (256 * (j - 1))) * scale)
 				texture:SetTexture(format(textureName.."%d", ((j - 1) * numTexturesWide) + k))
 
 				if discoveredOverlays[texName] then
@@ -1290,43 +1181,75 @@ local function updateOverlayTextures(frame, frameName, scale, alphaMod)
 					texture:SetAlpha(1 - (alphaMod or 0))
 					texture:SetDrawLayer("ARTWORK")
 				else
-					texture:SetVertexColor(self.db.profile.colorR, self.db.profile.colorG, self.db.profile.colorB)
-					texture:SetAlpha(self.db.profile.colorA * ( 1 - (alphaMod or 0)))
+					texture:SetVertexColor(r, g, b)
+					texture:SetAlpha(a * (1 - (alphaMod or 0)))
 					texture:SetDrawLayer("BORDER")
-					if db.debug then
-						DEFAULT_CHAT_FRAME:AddMessage(format("|cff33ff99Mapster|r: Subzone: %s in zone: %s", texName, mapFileName))
-					end
 				end
 
 				texture:Show()
 			end
 		end
 	end
-	for i = textureCount+1, numOv do
-		_G[format(frameName, i)]:Hide()
+
+	for i = textureCount + 1, numOv do
+		textureCache[i]:Hide()
 	end
 
-	for k in pairs(discoveredOverlays) do
-		discoveredOverlays[k] = nil
-	end
+	twipe(discoveredOverlays)
 end
 
-function FogClear:UpdateWorldMapOverlays()
+function Fog:UpdateWorldMapOverlays()
 	if not WorldMapFrame:IsShown() then return end
-	updateOverlayTextures(WorldMapDetailFrame, "WorldMapOverlay%d", 1, 0)
+
+	if NUM_WORLDMAP_OVERLAYS > self.NUM_WORLDMAP_OVERLAYS then
+		for i = self.NUM_WORLDMAP_OVERLAYS + 1, NUM_WORLDMAP_OVERLAYS do
+			tinsert(worldMapCache, i, _G[format("WorldMapOverlay%d", i)])
+		end
+		self.NUM_WORLDMAP_OVERLAYS = NUM_WORLDMAP_OVERLAYS
+	end
+
+	UpdateOverlayTextures(Fog, WorldMapDetailFrame, "FogWorldMapOverlay%d", worldMapCache, 1, 0)
 end
 
-function FogClear:UpdateBattlefieldMinimapOverlays()
-	if not BattlefieldMinimap or not BattlefieldMinimap:IsShown() then return end
-	local scale = BattlefieldMinimap1:GetWidth()/256
-	updateOverlayTextures(BattlefieldMinimap, "BattlefieldMinimapOverlay%d", scale, BattlefieldMinimapOptions.opacity)
+function Fog:UpdateFog()
+	if E.db.fogofwar.enable then
+		self:SecureHook("WorldMapFrame_Update", "UpdateWorldMapOverlays")
+
+		twipe(worldMapCache)
+		self.NUM_WORLDMAP_OVERLAYS = 0
+
+		if WorldMapFrame:IsShown() then
+			self:UpdateWorldMapOverlays()
+		end
+	else
+		self:UnhookAll()
+
+		for i = 1, NUM_WORLDMAP_OVERLAYS do
+			local tex = _G[format("WorldMapOverlay%d", i)]
+
+			tex:SetVertexColor(1, 1, 1)
+			tex:SetAlpha(1)
+			tex:SetDrawLayer("ARTWORK")
+		end
+
+		for i = 1, #worldMapCache do
+			worldMapCache[i]:Hide()
+		end
+
+		if WorldMapFrame:IsShown() then
+			WorldMapFrame_Update()
+		end
+	end
 end
 
-function FogClear:GetOverlayColor()
-	return self.db.profile.colorR, self.db.profile.colorG, self.db.profile.colorB, self.db.profile.colorA
+function Fog:Initialize()
+	EP:RegisterPlugin(addonName, InsertOptions)
+
+	Fog:UpdateFog()
 end
 
-function FogClear:SetOverlayColor(info, r,g,b,a)
-	self.db.profile.colorR, self.db.profile.colorG, self.db.profile.colorB, self.db.profile.colorA = r,g,b,a
-	if self:IsEnabled() then self:Refresh() end
+local function InitializeCallback()
+	Fog:Initialize()
 end
+
+E:RegisterModule(Fog:GetName(), InitializeCallback)

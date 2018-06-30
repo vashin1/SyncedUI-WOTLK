@@ -1,0 +1,9 @@
+## Interface: 30300
+## Author: Lockslap
+## Version: 1.00
+## Title: |cffA11313E|r|cffC4C4C4lvUI|r |cffA11313F|r|cffC4C4C4og|r |cffA11313O|r|cffC4C4C4f|r |cffA11313W|r|cffC4C4C4ar|r
+## Notes: Removes the fog of war from the world map.
+## RequiredDeps: ElvUI
+
+Locales.lua
+ElvUI_FogofWar.lua
