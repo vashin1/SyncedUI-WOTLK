@@ -39,7 +39,7 @@ The following search keywords can also be used:
     • bou : Bind on use items.
     • boe : Bind on equip items.
     • boa : Bind on account items.
-    • quest : Quest bound items.]=];
+    • quest : Quest bound items.]=]
 L["TEXT_FORMAT_DESC"] = [=[提供一个更改文字格式的方式
 
 例如:
@@ -68,7 +68,7 @@ L["NAMEPLATE_FRAMELEVEL_DESC"] = [=[如果你设置为1则所有符合这个过�
 --ActionBars
 L["Action Paging"] = "动作条翻页"
 L["ActionBars"] = "动作条"
-L["Action button keybinds will respond on key down, rather than on key up"] = true;
+L["Action button keybinds will respond on key down, rather than on key up"] = true
 L["Allow LBF to handle the skinning of this element."] = "允许LBF来处理这个元素的皮肤"
 L["Alpha"] = "透明度"
 L["Anchor Point"] = "定位方向"
@@ -79,6 +79,8 @@ L["Button Spacing"] = "按钮间距"
 L["Buttons Per Row"] = "每行按钮数"
 L["Buttons"] = "按钮数"
 L["Change the alpha level of the frame."] = "改变框架透明度"
+L["Color Keybind Text when Out of Range, instead of the button."] = "当你超过射程时对键位文字着色而不是对按钮着色"
+L["Color Keybind Text"] = "键位文字着色"
 L["Color of the actionbutton when not usable."] = "动作条按键不可用时的颜色"
 L["Color of the actionbutton when out of power (Mana, Rage)."] = "当能量不足时(如法力,怒力等)动作条按键的颜色"
 L["Color of the actionbutton when out of range."] = "当超出距离时动作条按键的颜色"
@@ -139,11 +141,11 @@ L["Use Override"] = "强制覆盖"
 L["Visibility State"] = "可见状态"
 L["Width Multiplier"] = "宽度倍增"
 L[ [=[This works like a macro, you can run different situations to get the actionbar to page differently.
- Example: [combat] 2;]=] ] = [=[和宏写法类似, 能根据不同姿态切换动作条.
- 例如: [combat] 2;]=]
+ Example: '[combat] 2;']=] ] = [=[和宏写法类似, 能根据不同姿态切换动作条.
+ 例如: '[combat] 2;']=]
 L[ [=[This works like a macro, you can run different situations to get the actionbar to show/hide differently.
- Example: [combat] show;hide]=] ] = [=[和宏写法类似, 能根据不同姿态切换动作条显示或隐藏.
- 例如: [combat] show;hide]=]
+ Example: '[combat] show;hide']=] ] = [=[和宏写法类似, 能根据不同姿态切换动作条显示或隐藏.
+ 例如: '[combat] show;hide']=]
 
 --Bags
 L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."] = "瘛餃銝芰祗瘜撅”泵祗瘜◤敹賜"
@@ -354,6 +356,7 @@ L["Date Format"] = true
 L["Display data panels below the chat, used for datatexts."] = "显示聊天框下方的信息框"
 L["Display minimap panels below the minimap, used for datatexts."] = "显示小地图下方的信息框"
 L["Gold Format"] = "金币格式"
+L["Hide specific sections in the datatext tooltip."] = "隐藏信息文字鼠标提示中的特定模块"
 L["left"] = "左"
 L["LeftChatDataPanel"] = "左聊天框"
 L["LeftMiniPanel"] = "小地图左方"
@@ -391,7 +394,6 @@ L["Used as RaidDebuff Indicator"] = "作为团队减益指示器"
 L["Accept Invites"] = "自动接受邀请"
 L["Adjust the position of the threat bar to either the left or right datatext panels."] = "调整仇恨条的位置于左侧或右侧信息面板"
 L["AFK Mode"] = "离开模式"
-L["Animate Config"] = "动画设置"
 L["Announce Interrupts"] = "打断通告"
 L["Announce when you interrupt a spell to the specified chat channel."] = "在指定聊天频道通知打断信息"
 L["Attempt to support eyefinity/nvidia surround."] = "尝试支持eyefinity/nvidia surround"
@@ -430,7 +432,6 @@ L["Hides the red error text at the top of the screen while in combat."] = "战�
 L["Log Taints"] = "错误记录"
 L["Login Message"] = "登陆信息"
 L["Loot Roll"] = "掷骰"
-L["Loot"] = "拾取"
 L["Lowest Allowed UI Scale"] = "雿捂UI蝻拇"
 L["Multi-Monitor Support"] = "多显示器支持"
 L["Name Font"] = "名称字体"
@@ -453,9 +454,23 @@ L["Top Panel"] = "顶部面板"
 L["Unit Prefix Style"] = "单位缩写"
 L["Vendor Grays"] = "出售灰色物品"
 L["Vendor Gray Detailed Report"] = "出售灰色物品详细报告"
-L["Version Check"] = true;
+L["Version Check"] = true
 L["Watch Frame Height"] = "任务框架高度"
 L["When you go AFK display the AFK screen."] = "当你离开时显示AFK界面"
+
+--Aura Filter
+---Whitelists
+L["Personal"] = "自己的"
+L["nonPersonal"] = "他人的"
+L["notCastByUnit"] = "非该单位的"
+L["Dispellable"] = "可驱散的"
+L["notDispellable"] = "不可驱散的"
+L["CastByUnit"] = "该单位施放的"
+---Blacklists
+L["blockNonPersonal"] = "[屏蔽]他人的"
+L["blockNoDuration"] = "[屏蔽]永久的"
+L["blockDispellable"] = "[屏蔽]可驱散的"
+L["blockNotDispellable"] = "[屏蔽]不可驱散的"
 
 --Media
 L["Applies the font and font size settings throughout the entire user interface. Note: Some font size settings will be skipped due to them having a smaller font size by default."] = "把该字体设置应用到所有ElvUI设置中去,但是某些设置并不会被改变"
@@ -516,11 +531,27 @@ L["X-Offset"] = "X偏移"
 L["Y-Offset"] = "Y偏移"
 
 --Misc
+L["Filters are not allowed to have commas in their name. Stripping commas from filter name."] = "过滤器的名字中不允许有逗号, 已将逗号移除."
 L["Install"] = "安装"
 L["Run the installation process."] = "执行安装程序"
 L["Toggle Anchors"] = "切换定位开关"
 L["Unlock various elements of the UI to be repositioned."] = "解锁界面上的各种框架来更改位置"
 L["Version"] = "版本"
+
+--Module Reset
+L["Are you sure you want to reset ActionBars settings?"] = true
+L["Are you sure you want to reset Auras settings?"] = true
+L["Are you sure you want to reset Bags settings?"] = true
+L["Are you sure you want to reset Chat settings?"] = true
+L["Are you sure you want to reset Cooldown settings?"] = true
+L["Are you sure you want to reset DataBars settings?"] = true
+L["Are you sure you want to reset DataTexts settings?"] = true
+L["Are you sure you want to reset General settings?"] = true
+L["Are you sure you want to reset NamePlates settings?"] = true
+L["Are you sure you want to reset Tooltip settings?"] = true
+L["Are you sure you want to reset UnitFrames settings?"] = true
+L["Module Reset"] = true
+L["This section will help reset specfic settings back to default."] = true
 
 --NamePlates
 L["# Displayed Auras"] = "显示光环的数量"
@@ -556,6 +587,7 @@ L["Cooldowns"] = "冷却"
 L["Copy settings from another unit."] = "从其他框架中复制设置"
 L["Copy Settings From"] = "复制设置"
 L["Current Level"] = "当前等级"
+L["Cutaway Health"] = "血量变化高亮"
 L["Default Settings"] = "默认设置"
 L["Display a healer icon over known healers inside battlegrounds or arenas."] = "战场或竞技场中, 为已确认为治疗的玩家标上补职图标"
 L["Display combo points on nameplates."] = "在血条显示连击点."
@@ -569,6 +601,7 @@ L["Enemy Player Frames"] = "敌对玩家"
 L["Enemy"] = "敌对"
 L["ENEMY_NPC"] = "敌对NPC"
 L["ENEMY_PLAYER"] = "敌对玩家"
+L["Fade Out"] = "淡出时长"
 L["Filter already exists!"] = "过滤器已存在!"
 L["Filter Priority"] = "过滤器优先级"
 L["Filters Page"] = "过滤器界面"
@@ -584,11 +617,14 @@ L["Good Scale"] = "正常缩放"
 L["Good Transition Color"] = "正常过渡颜色"
 L["Healer Icon"] = "治疗图标"
 L["Health Color"] = "血量颜色"
+L["Health Length"] = "血量变化时长"
 L["Health Threshold"] = "血量阈值"
 L["Hide Frame"] = "隐藏框架"
 L["Hide Spell Name"] = "隐藏法术名字"
 L["Hide Time"] = "隐藏时间"
+L["How long the CutawayHealth will take to fade out."] = "血量变化高亮淡出过程所需的时间"
 L["How many seconds the castbar should stay visible after the cast failed or was interrupted."] = "在施法失败或被打断时施法条保持可见的秒数"
+L["How much time before the CutawayHealth starts to fade."] = "血量变化高亮淡出前所需要的时间"
 L["Icon Base Height"] = "图标基础高度"
 L["Icon Position"] = "图标位置"
 L["If enabled then it checks if auras are missing instead of being present on the unit."] = "启用后将会检查光环是否缺失而不是光环是否存在"
@@ -638,6 +674,7 @@ L["Overlapping Nameplates"] = "重叠姓名板"
 L["Player Health"] = "玩家血量"
 L["Player in Combat"] = "玩家战斗中"
 L["Player Out of Combat"] = "玩家战斗外"
+L["Power Threshold"] = "能量阈值"
 L["Reaction Colors"] = "声望"
 L["Reaction Type"] = "声望类型"
 L["Remove a Name from the list."] = true
@@ -656,7 +693,6 @@ L["Shortcuts"] = "快捷键"
 L["Side Arrows"] = "侧面箭头"
 L["Stacking Nameplates"] = "堆叠姓名板"
 L["Style Filter"] = "样式过滤器"
-L["Tagged NPC"] = "标记的NPC"
 L["Tanked Color"] = "坦克颜色"
 L["Target Indicator Color"] = "目标指示器颜色"
 L["Target Indicator"] = "目标指示器"
@@ -708,24 +744,22 @@ L["Table"] = "表"
 
 --Skins
 L["Alert Frames"] = "警报"
-L["Arena Frame"] = true;
-L["Arena Registrar"] = true;
+L["Arena Frame"] = true
+L["Arena Registrar"] = true
 L["BG Map"] = "战场地图"
 L["BG Score"] = "战场记分"
 L["Calendar Frame"] = "日历框架"
 L["Character Frame"] = "角色"
 L["Debug Tools"] = "除错工具"
-L["GM Chat"] = true;
+L["GM Chat"] = true
 L["Gossip Frame"] = "闲谈"
-L["Greeting Frame"] = true;
+L["Greeting Frame"] = true
 L["Guild Bank"] = "公会银行"
 L["Guild Registrar"] = "公会注册"
 L["Help Frame"] = "帮助"
-L["LFD Frame"] = true;
-L["LFR Frame"] = true;
+L["LFD Frame"] = true
+L["LFR Frame"] = true
 L["Loot Frames"] = "拾取"
-L["Mail Frame"] = "邮箱"
-L["Merchant Frame"] = "商人"
 L["Mirror Timers"] = "镜像计时器"
 L["Misc Frames"] = "其他"
 L["Petition Frame"] = "回报GM"
@@ -738,7 +772,7 @@ L["Stable"] = "兽栏"
 L["Tabard Frame"] = "战袍"
 L["Taxi Frame"] = "载具"
 L["Trainer Frame"] = "训练师"
-L["Tutorial Frame"] = true;
+L["Tutorial Frame"] = true
 L["World Map"] = "世界地图"
 
 --Tooltip
@@ -786,7 +820,7 @@ L["Additional spacing between each individual group."] = "各小队之间的额�
 L["Alpha channel is taken from the color option."] = "Alpha通道由颜色选项决定"
 L["An X offset (in pixels) to be used when anchoring new frames."] = "锚定新框架时的X偏移(像素)"
 L["An Y offset (in pixels) to be used when anchoring new frames."] = "锚定新框架时的Y偏移(像素)"
-L["Animation Speed"] = true;
+L["Animation Speed"] = true
 L["Ascending or Descending order."] = "升序或降序"
 L["Assist Frames"] = "助理框架"
 L["Assist Target"] = "助理目标"
@@ -800,6 +834,8 @@ L["Bars will transition smoothly."] = "状态条平滑增减"
 L["Below"] = "向下"
 L["Blacklist Modifier"] = "黑名单功能键"
 L["Blacklist"] = "黑名单"
+L["Block Mouseover Glow"] = true
+L["Block Target Glow"] = true
 L["Borders"] = "边框"
 L["Buff Indicator"] = "增益指示器"
 L["Buffs"] = "增益光环"
@@ -896,7 +932,9 @@ L["Force On"] = "强制开启"
 L["Force Reaction Color"] = "强制声望颜色"
 L["Force the frames to show, they will act as if they are the player frame."] = "强制框架显示"
 L["Forces Debuff Highlight to be disabled for these frames"] = "为这些框架强制禁用debuff高亮"
+L["Forces Mouseover Glow to be disabled for these frames"] = true
 L["Forces reaction color instead of class color on units controlled by players."] = "对于玩家控制的角色强制使用声望颜色而不是职业颜色"
+L["Forces Target Glow to be disabled for these frames"] = true
 L["Format"] = "格式"
 L["Frame Glow"] = "框体高亮"
 L["Frame Level"] = "框架层次"
@@ -977,7 +1015,6 @@ L["Only show when you are mousing over a frame."] = "鼠标滑过时显示."
 L["OOR Alpha"] = "超出距离透明度"
 L["Other Filter"] = "其他过滤器"
 L["Others"] = "他人的"
-L["Overlay the healthbar"] = "头像重叠与生命条上"
 L["Overlay"] = "重叠显示"
 L["Override any custom visibility setting in certain situations, EX: Only show groups 1 and 2 inside a 10 man instance."] = "复写可见性的设定, 例如: 在10人副本里只显示1队和2队"
 L["Override the default class color setting."] = "覆盖默认的职业色设置"
@@ -987,7 +1024,6 @@ L["Party Pets"] = "队伍宠物"
 L["Party Targets"] = "队伍目标"
 L["Per Row"] = "每行"
 L["Percent"] = "百分比"
-L["Personal"] = "个人的"
 L["Pet Name"] = "宠物名字"
 L["Player Frame Aura Bars"] = "玩家框架光环条"
 L["Poison Effect"] = "毒药效果"
@@ -1036,7 +1072,7 @@ L["Set the priority order of the spell, please note that prioritys are only used
 L["Set the type of auras to show when a unit is a foe."] = "当单位是敌对时设置光环显示的类型"
 L["Set the type of auras to show when a unit is friendly."] = "当单位是友好时设置光环显示的类型"
 L["Sets the font instance's horizontal text alignment style."] = "设置字体实例的水平文本对齐方式"
-L["Show"] = true;
+L["Show"] = true
 L["Show an incoming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."] = "在单位框架中显示即将回复的的预测治疗量, 过量治疗则以不同颜色显示"
 L["Show Aura From Other Players"] = "显示其他玩家的光环"
 L["Show Auras"] = "显示光环"
@@ -1085,6 +1121,7 @@ L["The font that the unitframes will use."] = "单位框架字体"
 L["The initial group will start near the center and grow out."] = "最初的队伍由中心开始增长"
 L["The name you have selected is already in use by another element."] = "你所选的名称已经被另一组件占用"
 L["The object you want to attach to."] = "你想依附的目标"
+L["The Portrait will overlay the Healthbar. This will be automatically happen if the Frame Orientation is set to Middle."] = "头像将显示在生命条上. 当框体层级设置为Middle时自动设置"
 L["Thin Borders"] = "细边框"
 L["This dictates the size of the icon when it is not attached to the castbar."] = "指定未吸附在施法条内时图标的尺寸"
 L["This opens the UnitFrames Color settings. These settings affect all unitframes."] = "这将开启单位框体颜色设置.这些设置会影响所有单位框体"

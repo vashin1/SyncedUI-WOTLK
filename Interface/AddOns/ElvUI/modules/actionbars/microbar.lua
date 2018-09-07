@@ -1,8 +1,10 @@
-local E, L, V, P, G = unpack(select(2, ...))
-local AB = E:GetModule("ActionBars")
+local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local AB = E:GetModule("ActionBars");
 
+--Cache global variables
+--Lua functions
 local _G = _G
-
+--WoW API / Variables
 local CreateFrame = CreateFrame
 local UnitLevel = UnitLevel
 local UpdateMicroButtonsParent = UpdateMicroButtonsParent
@@ -33,22 +35,13 @@ local function onLeave()
 	end
 end
 
-function AB:MainMenuMicroButton_SetNormal()
-	MainMenuBarPerformanceBar:SetPoint("TOPLEFT", MainMenuMicroButton, "TOPLEFT", 9, -36)
-end
-
-function AB:MainMenuMicroButton_SetPushed()
-	MainMenuBarPerformanceBar:SetPoint("TOPLEFT", MainMenuMicroButton, "TOPLEFT", 8, -37)
-end
-
 function AB:HandleMicroButton(button)
 	local pushed = button:GetPushedTexture()
 	local normal = button:GetNormalTexture()
 	local disabled = button:GetDisabledTexture()
 
 	local f = CreateFrame("Frame", nil, button)
-	f:SetFrameLevel(1)
-	f:SetFrameStrata("BACKGROUND")
+	f:SetFrameLevel(button:GetFrameLevel() - 1)
 	f:SetTemplate("Default", true)
 	f:SetOutside(button)
 	button.backdrop = f
@@ -77,23 +70,31 @@ function AB:UpdateMicroButtonsParent()
 	for i = 1, #MICRO_BUTTONS do
 		_G[MICRO_BUTTONS[i]]:SetParent(ElvUI_MicroBar)
 	end
+end
 
-	AB:UpdateMicroPositionDimensions()
+function AB:UpdateMicroBarVisibility()
+	if InCombatLockdown() then
+		AB.NeedsUpdateMicroBarVisibility = true
+		self:RegisterEvent("PLAYER_REGEN_ENABLED")
+		return
+	end
+
+	local visibility = self.db.microbar.visibility
+	if visibility and visibility:match("[\n\r]") then
+		visibility = visibility:gsub("[\n\r]", "")
+	end
+
+	RegisterStateDriver(ElvUI_MicroBar.visibility, "visibility", (self.db.microbar.enabled and visibility) or "hide")
 end
 
 function AB:UpdateMicroPositionDimensions()
 	if not ElvUI_MicroBar then return end
 
-	if InCombatLockdown() then
-		AB.NeedsUpdateMicroPositionDimensions = true
-		self:RegisterEvent("PLAYER_REGEN_ENABLED")
-		return
-	end
-
 	local numRows = 1
 	local prevButton = ElvUI_MicroBar
 	local offset = E:Scale(E.PixelMode and 1 or 3)
 	local spacing = E:Scale(offset + self.db.microbar.buttonSpacing)
+
 	for i = 1, #MICRO_BUTTONS do
 		local button = _G[MICRO_BUTTONS[i]]
 		local lastColumnButton = i - self.db.microbar.buttonsPerRow
@@ -124,13 +125,6 @@ function AB:UpdateMicroPositionDimensions()
 	AB.MicroHeight = (((_G["CharacterMicroButton"]:GetHeight() + spacing) * numRows) - spacing) + (offset * 2)
 	ElvUI_MicroBar:Size(AB.MicroWidth, AB.MicroHeight)
 
-	local visibility = self.db.microbar.visibility
-	if visibility and visibility:match("[\n\r]") then
-		visibility = visibility:gsub("[\n\r]","")
-	end
-
-	RegisterStateDriver(ElvUI_MicroBar, "visibility", (self.db.microbar.enabled and visibility) or "hide")
-
 	if ElvUI_MicroBar.mover then
 		if self.db.microbar.enabled then
 			E:EnableMover(ElvUI_MicroBar.mover:GetName())
@@ -138,6 +132,8 @@ function AB:UpdateMicroPositionDimensions()
 			E:DisableMover(ElvUI_MicroBar.mover:GetName())
 		end
 	end
+
+	self:UpdateMicroBarVisibility()
 end
 
 function AB:UpdateMicroButtons()
@@ -146,11 +142,6 @@ function AB:UpdateMicroButtons()
 	PVPMicroButtonTexture:Point("BOTTOMRIGHT", PVPMicroButton, "BOTTOMRIGHT")
 	PVPMicroButtonTexture:SetTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PVP-Icons")
 
-	if E.myfaction == "Alliance"  then
-		PVPMicroButtonTexture:SetTexCoord(0.545, 0.935, 0.070, 0.940)
-	else
-		PVPMicroButtonTexture:SetTexCoord(0.100, 0.475, 0.070, 0.940)
-	end
 	if UnitLevel("player") < PVPMicroButton.minLevel then
 		PVPMicroButtonTexture:SetDesaturated(true)
 	else
@@ -161,10 +152,15 @@ function AB:UpdateMicroButtons()
 end
 
 function AB:SetupMicroBar()
-	local microBar = CreateFrame("Frame", "ElvUI_MicroBar", E.UIParent, "SecureHandlerStateTemplate")
+	local microBar = CreateFrame("Frame", "ElvUI_MicroBar", E.UIParent)
 	microBar:Point("TOPLEFT", E.UIParent, "TOPLEFT", 4, -48)
+	microBar:EnableMouse(true)
 	microBar:SetScript("OnEnter", onEnter)
 	microBar:SetScript("OnLeave", onLeave)
+
+	microBar.visibility = CreateFrame('Frame', nil, E.UIParent, "SecureHandlerStateTemplate")
+	microBar.visibility:SetScript("OnShow", function() microBar:Show() end)
+	microBar.visibility:SetScript("OnHide", function() microBar:Hide() end)
 
 	for i = 1, #MICRO_BUTTONS do
 		self:HandleMicroButton(_G[MICRO_BUTTONS[i]])
@@ -172,14 +168,15 @@ function AB:SetupMicroBar()
 
 	MicroButtonPortrait:SetInside(CharacterMicroButton.backdrop)
 
-	self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateMicroButtonsParent")
+	if E.myfaction == "Alliance"  then
+		PVPMicroButtonTexture:SetTexCoord(0.545, 0.935, 0.070, 0.940)
+	else
+		PVPMicroButtonTexture:SetTexCoord(0.100, 0.475, 0.070, 0.940)
+	end
 
 	self:SecureHook("VehicleMenuBar_MoveMicroButtons", "UpdateMicroButtonsParent")
-	self:SecureHook("MainMenuMicroButton_SetPushed")
-	self:SecureHook("MainMenuMicroButton_SetNormal")
 	self:SecureHook("UpdateMicroButtons")
 
-	self:MainMenuMicroButton_SetNormal()
 	self:UpdateMicroPositionDimensions()
 	MainMenuBarPerformanceBar:Kill()
 

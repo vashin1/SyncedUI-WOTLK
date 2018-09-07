@@ -1,5 +1,9 @@
 local E, L, V, P, G = unpack(ElvUI);
-local S = E:GetModule("Skins");
+
+local ACHIEVEMENTS, AUCTIONS, BARBERSHOP, FRIENDS, INSPECT, TALENTS, TRADE, MERCHANT, MACROS, SPELLBOOK = ACHIEVEMENTS, AUCTIONS, BARBERSHOP, FRIENDS, INSPECT, TALENTS, TRADE, MERCHANT, MACROS, SPELLBOOK
+local TRADESKILLS, WORLD_MAP = TRADESKILLS, WORLD_MAP
+local MAIL_LABEL, TIMEMANAGER_TITLE, KEY_BINDING = MAIL_LABEL, TIMEMANAGER_TITLE, KEY_BINDING
+local INTERFACE_OPTIONS, DRESSUP_FRAME = INTERFACE_OPTIONS, DRESSUP_FRAME
 
 E.Options.args.skins = {
 	type = "group",
@@ -179,12 +183,12 @@ E.Options.args.skins = {
 				},
 				mail = {
 					type = "toggle",
-					name = L["Mail Frame"],
+					name = MAIL_LABEL,
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				merchant = {
 					type = "toggle",
-					name = L["Merchant Frame"],
+					name = MERCHANT,
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				misc = {

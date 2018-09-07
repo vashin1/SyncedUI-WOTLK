@@ -4,9 +4,11 @@ local ACD = LibStub("AceConfigDialog-3.0-ElvUI")
 local group
 
 local _G = _G
+local pairs = pairs
 
 local SetCVar = SetCVar
 local GameTooltip = _G["GameTooltip"]
+local FONT_SIZE = FONT_SIZE
 local NONE, COLOR, COLORS = NONE, COLOR, COLORS
 local SHIFT_KEY, ALT_KEY, CTRL_KEY = SHIFT_KEY, ALT_KEY, CTRL_KEY
 local OPTION_TOOLTIP_ACTION_BUTTON_USE_KEY_DOWN = OPTION_TOOLTIP_ACTION_BUTTON_USE_KEY_DOWN
@@ -60,6 +62,12 @@ local function BuildABConfig()
 				type = "toggle",
 				name = L["Keybind Text"],
 				desc = L["Display bind names on action buttons."]
+			},
+			useRangeColorText = {
+				order = 7,
+				type = "toggle",
+				name = L["Color Keybind Text"],
+				desc = L["Color Keybind Text when Out of Range, instead of the button."]
 			},
 			keyDown = {
 				order = 8,
@@ -179,7 +187,7 @@ local function BuildABConfig()
 						order = 5,
 						type = "range",
 						name = FONT_SIZE,
-						min = 4, max = 212, step = 1
+						min = 4, max = 32, step = 1
 					},
 					fontOutline = {
 						order = 6,
@@ -236,7 +244,7 @@ local function BuildABConfig()
 			guiInline = false,
 			disabled = function() return not E.ActionBars or not E.myclass == "SHAMAN" end,
 			get = function(info) return E.db.actionbar["barTotem"][ info[#info] ] end,
-			set = function(info, value) E.db.actionbar["barTotem"][ info[#info] ] = value AB:AdjustTotemSettings() AB:PositionAndSizeBarTotem() end,
+			set = function(info, value) E.db.actionbar["barTotem"][ info[#info] ] = value; AB:PositionAndSizeBarTotem() end,
 			args = {
 				info = {
 					order = 1,
@@ -255,18 +263,23 @@ local function BuildABConfig()
 					name = L["Restore Bar"],
 					desc = L["Restore the actionbars default settings"],
 					buttonElvUI = true,
-					func = function() E:CopyTable(E.db.actionbar["barTotem"], P.actionbar["barTotem"]) E:ResetMovers(TUTORIAL_TITLE47) AB:AdjustTotemSettings() AB:PositionAndSizeBarTotem() end,
+					func = function() E:CopyTable(E.db.actionbar["barTotem"], P.actionbar["barTotem"]); E:ResetMovers(TUTORIAL_TITLE47); AB:PositionAndSizeBarTotem() end,
 					disabled = function() return not E.db.actionbar.barTotem.enabled end
 				},
-				mouseover = {
+				spacer = {
 					order = 4,
+					type = "description",
+					name = ""
+				},
+				mouseover = {
+					order = 5,
 					type = "toggle",
 					name = L["Mouse Over"],
 					desc = L["The frame is not shown unless you mouse over the frame."],
 					disabled = function() return not E.db.actionbar.barTotem.enabled end
 				},
 				flyoutDirection = {
-					order = 5,
+					order = 6,
 					type = "select",
 					name = L["Flyout Direction"],
 					values = {
@@ -276,7 +289,7 @@ local function BuildABConfig()
 					disabled = function() return not E.db.actionbar.barTotem.enabled end
 				},
 				buttonsize = {
-					order = 6,
+					order = 7,
 					type = "range",
 					name = L["Button Size"],
 					desc = L["The size of the action buttons."],
@@ -284,7 +297,7 @@ local function BuildABConfig()
 					disabled = function() return not E.db.actionbar.barTotem.enabled end
 				},
 				buttonspacing = {
-					order = 7,
+					order = 8,
 					type = "range",
 					name = L["Button Spacing"],
 					desc = L["The spacing between buttons."],
@@ -292,7 +305,7 @@ local function BuildABConfig()
 					disabled = function() return not E.db.actionbar.barTotem.enabled end
 				},
 				flyoutSpacing = {
-					order = 8,
+					order = 9,
 					type = "range",
 					name = L["Flyout Spacing"],
 					desc = L["The spacing between buttons."],
@@ -300,7 +313,7 @@ local function BuildABConfig()
 					disabled = function() return not E.db.actionbar.barTotem.enabled end
 				},
 				alpha = {
-					order = 9,
+					order = 10,
 					type = "range",
 					name = L["Alpha"],
 					isPercent = true,
@@ -308,7 +321,7 @@ local function BuildABConfig()
 					disabled = function() return not E.db.actionbar.barTotem.enabled end
 				},
 				visibility = {
-					order = 10,
+					order = 11,
 					type = "input",
 					name = L["Visibility State"],
 					desc = L["This works like a macro, you can run different situations to get the actionbar to show/hide differently.\n Example: '[combat] show;hide'"],
@@ -456,10 +469,13 @@ local function BuildABConfig()
 				order = 17,
 				type = "input",
 				name = L["Visibility State"],
-				desc = L["This works like a macro, you can run different situations to get the actionbar to show/hide differently.\n Example: [combat] show;hide"],
+				desc = L["This works like a macro, you can run different situations to get the actionbar to show/hide differently.\n Example: '[combat] show;hide'"],
 				width = "full",
 				multiline = true,
 				set = function(info, value)
+					if value and value:match("[\n\r]") then
+						value = value:gsub("[\n\r]","")
+					end
 					E.db.actionbar["barPet"]["visibility"] = value
 					AB:UpdateButtonSettings()
 				end,
@@ -617,7 +633,8 @@ local function BuildABConfig()
 					end
 					E.db.actionbar["barShapeShift"]["visibility"] = value;
 					AB:UpdateButtonSettings()
-				end
+				end,
+				disabled = function() return not E.db.actionbar.barShapeShift.enabled end
 			}
 		}
 	}
@@ -854,11 +871,14 @@ local function BuildABConfig()
 					order = 18,
 					type = "input",
 					name = L["Action Paging"],
-					desc = L["This works like a macro, you can run different situations to get the actionbar to page differently.\n Example: [combat] 2;"],
+					desc = L["This works like a macro, you can run different situations to get the actionbar to page differently.\n Example: '[combat] 2;'"],
 					width = "full",
 					multiline = true,
 					get = function(info) return E.db.actionbar["bar"..i]["paging"][E.myclass] end,
 					set = function(info, value)
+						if value and value:match("[\n\r]") then
+							value = value:gsub("[\n\r]","")
+						end
 						if not E.db.actionbar["bar"..i]["paging"][E.myclass] then
 							E.db.actionbar["bar"..i]["paging"][E.myclass] = {}
 						end
@@ -872,10 +892,13 @@ local function BuildABConfig()
 					order = 19,
 					type = "input",
 					name = L["Visibility State"],
-					desc = L["This works like a macro, you can run different situations to get the actionbar to show/hide differently.\n Example: [combat] show;hide"],
+					desc = L["This works like a macro, you can run different situations to get the actionbar to show/hide differently.\n Example: '[combat] show;hide'"],
 					width = "full",
 					multiline = true,
 					set = function(info, value)
+						if value and value:match("[\n\r]") then
+							value = value:gsub("[\n\r]","")
+						end
 						E.db.actionbar["bar"..i]["visibility"] = value
 						AB:UpdateButtonSettings()
 					end,

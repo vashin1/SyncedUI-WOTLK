@@ -673,7 +673,7 @@ function mod:QueueObject(object)
 	object:Hide()
 end
 
-function mod:OnUpdate(elapsed)
+function mod:OnUpdate()
 	local count = select("#", WorldGetChildren(WorldFrame))
 	if count ~= numChildren then
 		local frame, region
@@ -1008,7 +1008,7 @@ function mod:Initialize()
 	self:RegisterEvent("UNIT_NAME_UPDATE", "CacheGroupPetUnits")
 
 	--self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-	
+
 	LAI.UnregisterAllCallbacks(self)
 	LAI.RegisterCallback(self, "LibAuraInfo_AURA_APPLIED")
 	LAI.RegisterCallback(self, "LibAuraInfo_AURA_REMOVED")

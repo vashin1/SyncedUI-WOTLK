@@ -104,7 +104,7 @@ local function OnCallback(command)
 end
 
 function E:DelayScriptCall(msg)
-	local secs, command = msg:match("^([^%s]+)%s+(.*)$");
+	local secs, command = msg:match("^(%S+)%s+(.*)$")
 	secs = tonumber(secs);
 	if((not secs) or (#command == 0)) then
 		self:Print("usage: /in <seconds> <command>");
@@ -163,6 +163,7 @@ function E:LoadCommands()
 	self:RegisterChatCommand("disable", "DisableAddon");
 	self:RegisterChatCommand("farmmode", "FarmMode");
 	--self:RegisterChatCommand("aprilfools", "");
+	self:RegisterChatCommand("estatus", "ShowStatusReport")
 
 	if E:GetModule("ActionBars") and E.private.actionbar.enable then
 		self:RegisterChatCommand("kb", E:GetModule("ActionBars").ActivateBindMode);

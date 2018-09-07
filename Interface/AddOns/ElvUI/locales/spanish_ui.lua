@@ -7,7 +7,7 @@ if not L then return end
 L["INCOMPATIBLE_ADDON"] = "The addon %s is not compatible with ElvUI's %s module. Please select either the addon or the ElvUI module to disable."
 
 --*_MSG locales
-L["LOGIN_MSG"] = "Bienvenido a %sElvUI|r versión %s%s|r, escribe /ec para acceder al menú de configuración. Si necesitas ayuda o soporte técnico puedes visitarnos en https://github.com/ElvUI-WotLK/ElvUI"
+L["LOGIN_MSG"] = "Welcome to %sElvUI|r version %s%s|r, type /ec to access the in-game configuration menu. If you are in need of technical support you can visit us at https://github.com/ElvUI-WotLK/ElvUI or join our Discord: https://discord.gg/Uatdmm7"
 
 --ActionBars
 L["Binding"] = "Controles"
@@ -42,8 +42,8 @@ L["Vendor / Delete Grays"] = true
 
 --Chat
 L["AFK"] = "Ausente"
-L["BG"] = true;
-L["BGL"] = true;
+L["BG"] = true
+L["BGL"] = true
 L["DND"] = "Oc"
 L["G"] = "H"
 L["Invalid Target"] = "Objetivo Inválido"
@@ -61,10 +61,8 @@ L["yells"] = "grita"
 L["(Hold Shift) Memory Usage"] = "(Mantén Shift) Uso de Memoria"
 L["Avoidance Breakdown"] = "Desglose de Evasión"
 L["Character: "] = "Personaje: "
-L["Chest"] = "Pecho"
-L["Combat"] = "Combate"
-L["Combat Time"] = true;
-L["Coords"] = true;
+L["Combat Time"] = true
+L["Coords"] = true
 L["copperabbrev"] = "|cffeda55fc|r"
 L["Deficit:"] = "Déficit:"
 L["DPS"] = "DPS"
@@ -73,17 +71,17 @@ L["Friends List"] = "Lista de Amigos"
 L["Gold"] = "Oro"
 L["goldabbrev"] = "|cffffd700g|r"
 L["Hit"] = "Golpe"
-L["Hold Shift + Right Click:"] = true;
+L["Hold Shift + Right Click:"] = true
 L["Home Latency:"] = "Latencia Local:"
 L["HP"] = "Salud"
 L["HPS"] = "VPS"
 L["lvl"] = "Niv"
-L["Miss Chance"] = true;
+L["Miss Chance"] = true
 L["Mitigation By Level: "] = "Mitigación Por Nivel: "
 L["No Guild"] = "Sin Hermandad"
 L["Profit:"] = "Ganancia:"
-L["Reload UI"] = true;
-L["Reset Counters: Hold Shift + Left Click"] = true
+L["Reload UI"] = true
+L["Reset Counters: Hold Control + Right Click"] = true
 L["Reset Data: Hold Shift + Right Click"] = "Restablecer Datos: Mantén Shift + Clic Derecho"
 L["Saved Dungeon(s)"] = true
 L["Saved Raid(s)"] = "Banda(s) Guardada(s)"
@@ -91,15 +89,15 @@ L["Server: "] = "Servidor: "
 L["Session:"] = "Sesión:"
 L["silverabbrev"] = "|cffc7c7cfs|r"
 L["SP"] = "PH"
-L["Spell/Heal Power"] = true;
+L["Spell/Heal Power"] = true
 L["Spent:"] = "Gastada:"
 L["Stats For:"] = "Estadísticas para:"
-L["System"] = true;
+L["System"] = true
 L["Total CPU:"] = "CPU Total:"
 L["Total Memory:"] = "Memoria Total:"
 L["Total: "] = "Total: "
 L["Unhittable:"] = "Imbatible:"
-L["Wintergrasp"] = true;
+L["Wintergrasp"] = true
 
 --DebugTools
 L["%s: %s tried to call the protected function '%s'."] = "%s: %s intentó llamar a la función protegida '%s'."
@@ -120,7 +118,7 @@ L["Your profile was successfully recieved by the player."] = "Tu perfil ha sido 
 --Install
 L["Aura Bars & Icons"] = "Barras de Auras e Iconos"
 L["Auras Set"] = "Auras Configuradas"
-L["Auras"] = true;
+L["Auras"] = true
 L["Caster DPS"] = "DPS Hechizos"
 L["Chat Set"] = "Chat Configurado"
 L["Chat"] = "Chat"
@@ -186,10 +184,10 @@ L["Bars"] = "Barras"
 L["Calendar"] = "Calendario"
 L["Can't Roll"] = "No puede tirar dados"
 L["Disband Group"] = "Disolver Grupo"
-L["Empty Slot"] = true;
+L["Empty Slot"] = true
 L["Enable"] = "Habilitar"
 L["Experience"] = "Experiencia"
-L["Farm Mode"] = true;
+L["Farm Mode"] = true
 L["Fishy Loot"] = "Botín Sospechoso"
 L["Left Click:"] = "Click Izquierdo"
 L["Raid Menu"] = "Menú de Banda"
@@ -225,7 +223,7 @@ L["Loot Frame"] = "Marco de Botín"
 L["MA Frames"] = "Marcos de AP"
 L["Micro Bar"] = "Micro Barra"
 L["Minimap"] = "Minimapa"
-L["MirrorTimer"] = true;
+L["MirrorTimer"] = true
 L["MT Frames"] = "Marcos de TP"
 L["Party Frames"] = "Marco de Grupo"
 L["Pet Bar"] = "Barra de Mascota"
@@ -237,7 +235,7 @@ L["Player Castbar"] = "Barra de Lanzamiento del Jugador"
 L["Player Debuffs"] = "Perjuicios de Jugador"
 L["Player Frame"] = "Marco de Jugador"
 L["Player Powerbar"] = "Barra de Poder del Jugador"
-L["PvP"] = true;
+L["PvP"] = true
 L["Raid Frames"] = "Marcos de Banda"
 L["Raid Pet Frames"] = "Marcos de Banda con Mascotas"
 L["Raid-40 Frames"] = "Marcos de Banda de 40"
@@ -251,7 +249,7 @@ L["TargetTarget Frame"] = "Marco de Objetivo de Objetivo"
 L["TargetTargetTarget Frame"] = "Marco del Objetivo del Objetivo del Objetivo"
 L["Tooltip"] = "Descripción Emergente"
 L["Vehicle Seat Frame"] = "Marco del Asiento del Vehículo"
-L["Watch Frame"] = true;
+L["Watch Frame"] = true
 L["DESC_MOVERCONFIG"] = [=[Fijadores desbloqueados. Muévelos ahora y haz click en Bloquear cuando termines.
 
 Options:
@@ -291,7 +289,7 @@ L["A setting you have changed will change an option for this character only. Thi
 L["Accepting this will reset the UnitFrame settings for %s. Are you sure?"] = true
 L["Accepting this will reset your Filter Priority lists for all auras on NamePlates. Are you sure?"] = true
 L["Accepting this will reset your Filter Priority lists for all auras on UnitFrames. Are you sure?"] = true
-L["Are you sure you want to apply this font to all ElvUI elements?"] = true;
+L["Are you sure you want to apply this font to all ElvUI elements?"] = true
 L["Are you sure you want to disband the group?"] = "¿Estás seguro que quieres deshacer el grupo?"
 L["Are you sure you want to reset all the settings on this profile?"] = "¿Estás seguro que deseas restablecer todos los ajustes de este perfil?"
 L["Are you sure you want to reset every mover back to it's default position?"] = "¿Estás seguro que quieres resetear cada fijador a su posición por defecto?"
@@ -344,6 +342,6 @@ L["You can toggle the microbar by using your middle mouse button on the minimap 
 L["You can use the /resetui command to reset all of your movers. You can also use the command to reset a specific mover, /resetui <mover name>.\nExample: /resetui Player Frame"] = "Puedes usar el commando /resetui para restablecer todos tus fijadores. También puedes usar el comando para restablecer alguno en específico, /resetui <fijador>. PE: /resetui Player Frame"
 
 --UnitFrames
-L["Dead"] = true;
+L["Dead"] = true
 L["Ghost"] = "Fantasma"
 L["Offline"] = "Fuera de Línea"

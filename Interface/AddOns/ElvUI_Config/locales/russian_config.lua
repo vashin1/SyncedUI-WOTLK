@@ -1,7 +1,7 @@
 -- Russian localization file for ruRU.
 local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
 local L = AceLocale:NewLocale("ElvUI", "ruRU")
-if not L then return; end
+if not L then return end
 
 -- *_DESC locales
 L["ACTIONBARS_DESC"] = "Modify the actionbar settings."
@@ -39,7 +39,7 @@ L["SEARCH_SYNTAX_DESC"] = [=[С добавлением библиотеки LibI
     • bou : персональные при использовании.
     • boe : персональные при одевании.
     • boa : привязоные к учетной записи.
-    • quest : специальные предметы для заданий.]=];
+    • quest : специальные предметы для заданий.]=]
 L["TEXT_FORMAT_DESC"] = [=[Строка для изменения вида текста.
 
 Примеры:
@@ -60,7 +60,7 @@ L["TEXT_FORMAT_DESC"] = [=[Строка для изменения вида те�
 "name:medium" - Имя с ограничением длины в 15 символов
 "name:long" - Имя с ограничением длины в 20 символов
 
-Для отключения оставьте поле пустым, для дополнительной информации посетите http://www.tukui.org]=];
+Для отключения оставьте поле пустым, для дополнительной информации посетите http://www.tukui.org]=]
 L["NAMEPLATE_FRAMELEVEL_DESC"] = [=[If you set this to 1 then all plates triggered by this style filter will be above any of the non-triggered plates.
 
 If you set this to 2 in another style filter then all plates triggered by that filter will be above plates with frame level set to 1 and all non-triggered plates, and so on.
@@ -81,6 +81,8 @@ L["Button Spacing"] = "Отступ кнопок"
 L["Buttons Per Row"] = "Кнопок в ряду"
 L["Buttons"] = "Кнопок"
 L["Change the alpha level of the frame."] = "Изменяет прозрачность этого элемента"
+L["Color Keybind Text when Out of Range, instead of the button."] = "Окрашивать текст клавиш, если юнит вне радиуса, вместо всей кнопки."
+L["Color Keybind Text"] = "Окрашивать текст клавиш"
 L["Color of the actionbutton when not usable."] = "Цвет кнопок, которые невозможно использовать."
 L["Color of the actionbutton when out of power (Mana, Rage)."] = "Цвет кнопок на панелях команд, когда не хватает ресурса (маны, ярости)"
 L["Color of the actionbutton when out of range."] = "Цвет кнопок панелей команд, когда цель вне радиуса действия"
@@ -91,7 +93,7 @@ L["Color when the text is in the hours format."] = "Цвет текста вре
 L["Color when the text is in the minutes format."] = "Цвет текста времени восстановления в минутах."
 L["Color when the text is in the seconds format."] = "Цвет текста времени восстановления в секундах."
 L["Cooldown Text"] = "Текст восстановления"
-L["Cooldown Override"] = true
+L["Cooldown Override"] = "Замещение текста восстановления"
 L["Darken Inactive"] = "Неактивные затенены"
 L["Days"] = "Дни"
 L["Desaturate On Cooldown"] = "Обесцветить при кулдауне"
@@ -132,20 +134,20 @@ L["The first button anchors itself to this point on the bar."] = "Первая �
 L["The size of the action buttons."] = "Размер кнопок панели команд."
 L["The spacing between the backdrop and the buttons."] = "Расстояние между фоном панели и кнопками."
 L["This setting will be updated upon changing stances."] = "Эта настройка вступит в силу при смене стойки."
-L["This will override the global cooldown settings."] = true
+L["This will override the global cooldown settings."] = "Это перезапишет глобальные настройки времени восстановления."
 L["Threshold before text turns red and is in decimal form. Set to -1 for it to never turn red"] = "Время, после которого текст станет красным и начнет отображать доли секунды. Установите -1, чтобы не отображать текст в такой форме."
 L["Toggles the display of the actionbars backdrop."] = "Включить отображение фона панели команд."
 L["Transparency level when not in combat, no target exists, full health, not casting, and no focus target exists."] = "Уровень прозрачности вне боя, без цели, без фокуса, с полным здоровьем и без произношения заклинаний."
 L["Usable"] = "Можно использовать"
-L["Use Override"] = true
+L["Use Override"] = "Использовать замещение"
 L["Visibility State"] = "Статус отображения"
 L["Width Multiplier"] = "Множитель ширины"
 L[ [=[This works like a macro, you can run different situations to get the actionbar to page differently.
- Example: [combat] 2;]=] ] = [=[Работает как макрос. Вы можете задать различные условия для отображения разных панелей.
- Пример: [combat] 2;]=]
+ Example: '[combat] 2;']=] ] = [=[Работает как макрос. Вы можете задать различные условия для отображения разных панелей.
+ Пример: '[combat] 2;']=]
 L[ [=[This works like a macro, you can run different situations to get the actionbar to show/hide differently.
- Example: [combat] show;hide]=] ] = [=[Работает как макрос. Вы можете задать различные условия для показа/скрытия панели.
- Пример: [combat] show;hide]=]
+ Example: '[combat] show;hide']=] ] = [=[Работает как макрос. Вы можете задать различные условия для показа/скрытия панели.
+ Пример: '[combat] show;hide']=]
 
 --Bags
 L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."] = "Добавить предмет или синтаксис поиска в список игнорируемых. Предметы, соответствующие синтаксису, буду игнорироваться."
@@ -227,7 +229,7 @@ L["Seperate"] = "Разделение"
 L["Set the size of the individual auras."] = "Устанавливает размер аур"
 L["Sort Method"] = "Метод сортировки"
 L["The direction the auras will grow and then the direction they will grow after they reach the wrap after limit."] = "Направление роста аур и сторона с которой будет добавляться новый ряд."
-L["Threshold before the icon will fade out and back in. Set to -1 to disable."] = true
+L["Threshold before the icon will fade out and back in. Set to -1 to disable."] = "Значение, при котором иконка начнем мерцать. Установите на -1 для отключения."
 L["Time xOffset"] = "Отступ времени по X"
 L["Time yOffset"] = "Отступ времени по Y"
 L["Time"] = "Время"
@@ -356,6 +358,7 @@ L["Date Format"] = "Формат даты"
 L["Display data panels below the chat, used for datatexts."] = "Отображать панели под чатом, используется для инфо-текстов"
 L["Display minimap panels below the minimap, used for datatexts."] = "Отображать панели информационных текстов под миникартой."
 L["Gold Format"] = "Формат золота"
+L["Hide specific sections in the datatext tooltip."] = "Скрывать определенные части подсказки инфо-текста."
 L["left"] = "Слева"
 L["LeftChatDataPanel"] = "Левая панель чата"
 L["LeftMiniPanel"] = "Миникарта, слева"
@@ -393,7 +396,6 @@ L["Used as RaidDebuff Indicator"] = "Использовать как индик�
 L["Accept Invites"] = "Принимать приглашения"
 L["Adjust the position of the threat bar to either the left or right datatext panels."] = "Изменяет позицию полосы угрозы"
 L["AFK Mode"] = "Режим АФК"
-L["Animate Config"] = "Анимировать настройки"
 L["Announce Interrupts"] = "Объявлять о прерываниях"
 L["Announce when you interrupt a spell to the specified chat channel."] = "Объявлять о прерванных Вами заклинаниях в указанный канал чата."
 L["Attempt to support eyefinity/nvidia surround."] = "Пытаться поддерживать eyefinity/nvidia surround"
@@ -422,7 +424,7 @@ L["Emotion Icons"] = "Иконки эмоций"
 L["Enable/Disable the loot frame."] = "Включить/выключить окно добычи ElvUI."
 L["Enable/Disable the loot roll frame."] = "Включить/выключить фрейм распределения добычи ElvUI."
 L["Enables the ElvUI Raid Control panel."] = "Включает панель управления рейдом ElvUI."
-L["Enhanced PVP Messages"] = "Улущенные PvP сообщения"
+L["Enhanced PVP Messages"] = "Улучшенные PvP сообщения"
 L["General"] = "Общие"
 L["Height of the watch tracker. Increase size to be able to see more objectives."] = "Высота списка заданий. Увеличение размера позволить видеть большее количество."
 L["Hide At Max Level"] = "Прятать на максимальном уровне"
@@ -432,7 +434,6 @@ L["Hides the red error text at the top of the screen while in combat."] = "Ск�
 L["Log Taints"] = "Отслеживать недочеты"
 L["Login Message"] = "Сообщение загрузки"
 L["Loot Roll"] = "Раздел добычи"
-L["Loot"] = "Добыча"
 L["Lowest Allowed UI Scale"] = "Наименьший возможный масштаб"
 L["Multi-Monitor Support"] = "Поддержка нескольких мониторов"
 L["Name Font"] = "Шрифт имени"
@@ -458,6 +459,20 @@ L["Vendor Gray Detailed Report"] = "Подробности продажи"
 L["Version Check"] = "Проверка версии"
 L["Watch Frame Height"] = "Высота списка заданий"
 L["When you go AFK display the AFK screen."] = "Отображать специальный экран, когда вы переходите в состояние \"Отсутствует\"."
+
+--Aura Filter
+---Whitelists
+L["Personal"] = "Личные"
+L["nonPersonal"] = "Чужие"
+L["notCastByUnit"] = "Не пренадлежит юниту"
+L["Dispellable"] = "Развееваемые"
+L["notDispellable"] = "Не развееваемые"
+L["CastByUnit"] = "Принадлежит юниту"
+---Blacklists
+L["blockNonPersonal"] = "[Блокировать] Чужие"
+L["blockNoDuration"] = "[Блокировать] Без длительности"
+L["blockDispellable"] = "[Блокировать] Развееваемые"
+L["blockNotDispellable"] = "[Блокировать] Не развееваемые"
 
 --Media
 L["Applies the font and font size settings throughout the entire user interface. Note: Some font size settings will be skipped due to them having a smaller font size by default."] = "Применить этот шрифт ко всем элементам интерфейса. Некоторые шрифты будут пропущены из-за более мелкого размера по умолчанию."
@@ -518,11 +533,27 @@ L["X-Offset"] = "Отступ по X"
 L["Y-Offset"] = "Отступ по Y"
 
 --Misc
+L["Filters are not allowed to have commas in their name. Stripping commas from filter name."] = "Фильтры не могут иметь запятые в имени, удаляю запятые."
 L["Install"] = "Установка"
 L["Run the installation process."] = "Запустить процесс установки"
 L["Toggle Anchors"] = "Показать фиксаторы"
 L["Unlock various elements of the UI to be repositioned."] = "Разблокировать элементы интерфейса для их перемещения."
 L["Version"] = "Версия"
+
+--Module Reset
+L["Are you sure you want to reset ActionBars settings?"] = "Вы уверены, что хотите сбросить настройки панелей команд?"
+L["Are you sure you want to reset Auras settings?"] = "Вы уверены, что хотите сбросить настройки аур?"
+L["Are you sure you want to reset Bags settings?"] = "Вы уверены, что хотите сбросить настройки сумок?"
+L["Are you sure you want to reset Chat settings?"] = "Вы уверены, что хотите сбросить настройки чата?"
+L["Are you sure you want to reset Cooldown settings?"] = "Вы уверены, что хотите сбросить настройки текста восстановления?"
+L["Are you sure you want to reset DataBars settings?"] = "Вы уверены, что хотите сбросить настройки инфо-полос?"
+L["Are you sure you want to reset DataTexts settings?"] = "Вы уверены, что хотите сбросить настройки инфо-текстов?"
+L["Are you sure you want to reset General settings?"] = "Вы уверены, что хотите сбросить общие настройки?"
+L["Are you sure you want to reset NamePlates settings?"] = "Вы уверены, что хотите сбросить настройки индикаторов здоровья?"
+L["Are you sure you want to reset Tooltip settings?"] = "Вы уверены, что хотите сбросить настройки подсказки?"
+L["Are you sure you want to reset UnitFrames settings?"] = "Вы уверены, что хотите сбросить настройки рамок юнитов?"
+L["Module Reset"] = "Сброс модуля"
+L["This section will help reset specfic settings back to default."] = "Эта секция поможет вернуть настройки конкретного модуля на умолчания."
 
 --NamePlates
 L["# Displayed Auras"] = "Кол-во аур"
@@ -558,6 +589,7 @@ L["Cooldowns"] = "Восстановление"
 L["Copy settings from another unit."] = "Скопировать настройки с другого юнита."
 L["Copy Settings From"] = "Скопировать из"
 L["Current Level"] = "Текущий уровень"
+L["Cutaway Health"] = "Убывающее здоровье"
 L["Default Settings"] = "Умолчания"
 L["Display a healer icon over known healers inside battlegrounds or arenas."] = "Отображать иконки лекаря над известными целителями на полях боя и аренах"
 L["Display combo points on nameplates."] = "Отображать очки серии на индикаторах"
@@ -569,8 +601,9 @@ L["Enemy Combat Toggle"] = "Переключение в бою (враги)"
 L["Enemy NPC Frames"] = "Враждебные НИП"
 L["Enemy Player Frames"] = "Враждебные игроки"
 L["Enemy"] = "Враг" --Also used in UnitFrames
-L["ENEMY_NPC"] = "Enemy NPC"
-L["ENEMY_PLAYER"] = "Enemy Player"
+L["ENEMY_NPC"] = "Враждебный НИП"
+L["ENEMY_PLAYER"] = "Враждебный игрок"
+L["Fade Out"] = "Исчезновение"
 L["Filter already exists!"] = "Фильтр уже существует!"
 L["Filter Priority"] = "Приоритет фильтров"
 L["Filters Page"] = "Фильтры"
@@ -586,11 +619,14 @@ L["Good Scale"] = "Хороший масштаб"
 L["Good Transition Color"] = "Цвет хорошего перехода"
 L["Healer Icon"] = "Иконки лекарей"
 L["Health Color"] = "Цвет здоровья"
+L["Health Length"] = "Длительность здоровья"
 L["Health Threshold"] = "Значение здоровья"
 L["Hide Frame"] = "Скрыть рамку"
 L["Hide Spell Name"] = "Скрыть название заклинания"
 L["Hide Time"] = "Скрыть время"
+L["How long the CutawayHealth will take to fade out."] = "Время на исчезновение убывающего здоровья."
 L["How many seconds the castbar should stay visible after the cast failed or was interrupted."] = "После прерывания или отмены, полоса заклинаний будет оставаться видимой указаное количество секунд."
+L["How much time before the CutawayHealth starts to fade."] = "Время до начала исчезновения убывающего здоровья."
 L["Icon Base Height"] = "Базовая высота иконки"
 L["Icon Position"] = "Позиция иконки"
 L["If enabled then it checks if auras are missing instead of being present on the unit."] = "Если включено, то будет проверять отсутствие ауры вместо ее наличия."
@@ -626,7 +662,7 @@ L["Minimum Level"] = "Минимальный уровень"
 L["Minimum Time Left"] = "Минимум оставшегося времени"
 L["Missing"] = "Отсутствует"
 L["Name Color"] = "Цвет имени"
-L["Name Colored Glow"] = true
+L["Name Colored Glow"] = "Свечение цвета имени"
 L["Name Only"] = "Только имя"
 L["NamePlates"] = "Индикаторы здоровья"
 L["Nameplate Motion Type"] = "Размещение индикаторов здоровья"
@@ -640,6 +676,7 @@ L["Overlapping Nameplates"] = "Наложение"
 L["Player Health"] = "Здоровье игрока"
 L["Player in Combat"] = "Игрок в бою"
 L["Player Out of Combat"] = "Игрок вне боя"
+L["Power Threshold"] = "Лимит ресурса"
 L["Reaction Colors"] = "Цвета отношений"
 L["Reaction Type"] = "Тип реакции"
 L["Remove a Name from the list."] = "Удалить имя из списка."
@@ -658,7 +695,6 @@ L["Shortcuts"] = "Ярлыки"
 L["Side Arrows"] = "Стрелки по сторонам"
 L["Stacking Nameplates"] = "Друг над другом"
 L["Style Filter"] = "Фильтры стиля"
-L["Tagged NPC"] = "Чужой НИП"
 L["Tanked Color"] = "Цвет танкуемого"
 L["Target Indicator Color"] = "Цвет индикатора цели"
 L["Target Indicator"] = "Индикатор цели"
@@ -682,7 +718,7 @@ L["Use drag and drop to rearrange filter priority or right click to remove a fil
 L["Use Shift+LeftClick to toggle between friendly or enemy or normal state. Normal state will allow the filter to be checked on all units. Friendly state is for friendly units only and enemy state is for enemy units."] = "Используйте Shift+ЛКМ для переключеня между дружественным, враждебным или нормальным ремимами. В нормалльном режиме фильтр будет проверять все юниты. В дружеском долько дружественные, во враждебном только враждебные."
 L["Use Tanked Color when a nameplate is being effectively tanked by another tank."] = "Использовать этот цвет для юнитов, которых держит другой танк."
 L["Use Target Scale"] = "Масштабирование цели"
-L["Use the Name Color of the unit for the Name Glow."] = true
+L["Use the Name Color of the unit for the Name Glow."] = "Исполдьзовать цвет имени юнита для свечения имени."
 L["Use Threat Color"] = "Использовать цвет угрозы"
 
 --Profiles Export/Import
@@ -726,8 +762,6 @@ L["Help Frame"] = "Помощь"
 L["LFD Frame"] = "Поиск подземелий"
 L["LFR Frame"] = "Список рейдов"
 L["Loot Frames"] = "Добыча"
-L["Mail Frame"] = "Почта"
-L["Merchant Frame"] = "Торговец"
 L["Mirror Timers"] = "Таймеры"
 L["Misc Frames"] = "Прочие фреймы"
 L["Petition Frame"] = "Хартия гильдии"
@@ -785,7 +819,7 @@ L["Add Spell ID or Name"] = "Добавить ID или имя заклинан�
 L["Add SpellID"] = "Добавить ID заклинания"
 L["Additional Power Text"] = "Текст дополнительного ресурса"
 L["Additional spacing between each individual group."] = "дополнительный отствуп между группами."
-L["Alpha channel is taken from the color option."] = true
+L["Alpha channel is taken from the color option."] = "Альфа канал берется из опции цвета."
 L["An X offset (in pixels) to be used when anchoring new frames."] = "Отступ по оси X (в пикселях) при фиксации новой рамки."
 L["An Y offset (in pixels) to be used when anchoring new frames."] = "Отступ по оси Y (в пикселях) при фиксации новой рамки."
 L["Animation Speed"] = "Скорость анимации"
@@ -802,6 +836,8 @@ L["Bars will transition smoothly."] = "Полосы будут изменять�
 L["Below"] = "Снизу"
 L["Blacklist Modifier"] = "Модификатор черного писка"
 L["Blacklist"] = "Черный список"
+L["Block Mouseover Glow"] = true
+L["Block Target Glow"] = true
 L["Borders"] = "Границы"
 L["Buff Indicator"] = "Индикатор баффов"
 L["Buffs"] = "Баффы"
@@ -898,9 +934,11 @@ L["Force On"] = "Постоянно включен"
 L["Force Reaction Color"] = "Принудительная реакция"
 L["Force the frames to show, they will act as if they are the player frame."] = "Принудительно показать рамки, они будут вести себя как рамка игрока."
 L["Forces Debuff Highlight to be disabled for these frames"] = "Принудительно не отображает подсветку дебаффов на этих рамках."
+L["Forces Mouseover Glow to be disabled for these frames"] = true
 L["Forces reaction color instead of class color on units controlled by players."] = "Принудительно окрашивает полосу здоровья по цвету реакции для рамок игроков."
+L["Forces Target Glow to be disabled for these frames"] = true
 L["Format"] = "Формат"
-L["Frame Glow"] = true
+L["Frame Glow"] = "Свечение рамки"
 L["Frame Level"] = "Уровень рамки"
 L["Frame Orientation"] = "Направление рамки"
 L["Frame Strata"] = "Слой рамки"
@@ -961,8 +999,8 @@ L["Middle Click - Set Focus"] = "Средний клик - фокус"
 L["Middle clicking the unit frame will cause your focus to match the unit."] = "Нажатие средней кнопкой мыши на фрейм юнита запомнит его в фокус."
 L["Middle"] = "Центр"
 L["Minimum Duration"] = "Минимальная длительность"
-L["Mouseover Glow"] = true
-L["Mouseover Highlight"] = true
+L["Mouseover Glow"] = "Свечение при наведении"
+L["Mouseover Highlight"] = "Подсветка при наведении"
 L["Mouseover"] = "При наведении"
 L["Name"] = "Имя" --Also used in Buffs and Debuffs
 L["Neutral"] = "Нейтральный"
@@ -979,7 +1017,6 @@ L["Only show when you are mousing over a frame."] = "Отображать тол
 L["OOR Alpha"] = "Прозрачность вне радиуса"
 L["Other Filter"] = "Другой фильтр"
 L["Others"] = "Чужое"
-L["Overlay the healthbar"] = "Отображение портрета на полосе здоровья."
 L["Overlay"] = "Наложение"
 L["Override any custom visibility setting in certain situations, EX: Only show groups 1 and 2 inside a 10 man instance."] = "Игнорировать пользовательские настройки отображения в определенных ситуациях. Пример: показывать только группы 1 и 2 в подземелье на 10 человек."
 L["Override the default class color setting."] = "Перекрывает установки цвета класса по умолчанию."
@@ -989,7 +1026,6 @@ L["Party Pets"] = "Питомцы группы"
 L["Party Targets"] = "Цели группы"
 L["Per Row"] = "Кол-во в ряду"
 L["Percent"] = "Процент"
-L["Personal"] = "Свое"
 L["Pet Name"] = "Имя питомца"
 L["Player Frame Aura Bars"] = "Полосы аур рамки игрока"
 L["Poison Effect"] = "Яд"
@@ -1021,7 +1057,7 @@ L["Remove Spell"] = "Удалить заклинание"
 L["Remove SpellID"] = "Удалить ID заклинания"
 L["Rest Icon"] = "Иконка отдыха"
 L["Restore Defaults"] = "Восстановить умолчания" --Also used in Media and ActionBars sections
-L["Resurrect Icon"] = true
+L["Resurrect Icon"] = "Иконка воскрешения"
 L["Right to Left"] = "Справа налево"
 L["RL / ML Icons"] = "Иконки лидера/ответственного"
 L["Role Icon"] = "Иконка роли"
@@ -1066,7 +1102,7 @@ L["Style"] = "Стиль"
 L["Tank Frames"] = "Танки"
 L["Tank Target"] = "Цели танков"
 L["Tapped"] = "Чужой"
-L["Targeted Glow"] = true
+L["Targeted Glow"] = "Свечение цели"
 L["Targeting"] = "Цели"
 L["Target Glow"] = "Подсветка цели"
 L["Target On Mouse-Down"] = "Выделение при нажати"
@@ -1087,6 +1123,7 @@ L["The font that the unitframes will use."] = "Шрифт рамок юнито�
 L["The initial group will start near the center and grow out."] = "Первая группа появится в центре и будет расти наружу."
 L["The name you have selected is already in use by another element."] = "Выбранное вами имя уже используется другим элементом"
 L["The object you want to attach to."] = "Объект, к которому Вы хотите прикрепить полосы"
+L["The Portrait will overlay the Healthbar. This will be automatically happen if the Frame Orientation is set to Middle."] = "Портрет будет находится на полосе здоровья. Автоматически активируется, если направление выставлено на Центр."
 L["Thin Borders"] = "Тонкие границы"
 L["This dictates the size of the icon when it is not attached to the castbar."] = "Определяет размер иконки, когда она не привязана к инфо панели."
 L["This opens the UnitFrames Color settings. These settings affect all unitframes."] = "Открывает опции окрашивания рамок юнитов. Эти настройки влияют на все рамки."

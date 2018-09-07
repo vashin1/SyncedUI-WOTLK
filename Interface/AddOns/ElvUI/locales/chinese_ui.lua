@@ -7,7 +7,7 @@ if not L then return end
 L["INCOMPATIBLE_ADDON"] = "插件 %s 不相容于 ElvUI 的 %s 模组, 请停用不相容的插件, 或停用模组."
 
 --*_MSG locales
-L["LOGIN_MSG"] = "欢迎使用 %sElvUI|r %s%s|r 版, 请输入/ec进入设定介面. 如需技术支持,请至至 https://github.com/ElvUI-WotLK/ElvUI"
+L["LOGIN_MSG"] = "Welcome to %sElvUI|r version %s%s|r, type /ec to access the in-game configuration menu. If you are in need of technical support you can visit us at https://github.com/ElvUI-WotLK/ElvUI or join our Discord: https://discord.gg/Uatdmm7"
 
 --ActionBars
 L["Binding"] = "绑定"
@@ -42,16 +42,16 @@ L["Vendor / Delete Grays"] = "出售/删除灰色物品"
 
 --Chat
 L["AFK"] = "离开" --Also used in datatexts and tooltip
-L["BG"] = true;
-L["BGL"] = true;
+L["BG"] = true
+L["BGL"] = true
 L["DND"] = "忙碌" --Also used in datatexts and tooltip
 L["G"] = "公会"
 L["Invalid Target"] = "无效的目标"
-L["O"] = "干部"
+L["O"] = "官员"
 L["P"] = "队伍"
 L["PL"] = "队长"
 L["R"] = "团队"
-L["RL"] = "团队队长"
+L["RL"] = "团队领袖"
 L["RW"] = "团队警告"
 L["says"] = "说"
 L["whispers"] = "密语"
@@ -61,12 +61,10 @@ L["yells"] = "大喊"
 L["(Hold Shift) Memory Usage"] = "(按住Shift) 内存占用"
 L["Avoidance Breakdown"] = "免伤统计"
 L["Character: "] = "角色: "
-L["Chest"] = "胸"
-L["Combat"] = "战斗"
-L["Combat Time"] = true;
+L["Combat Time"] = true
 L["Coords"] = "坐标"
 L["copperabbrev"] = "|cffeda55f铜|r"
-L["Deficit:"] = "赤字:"
+L["Deficit:"] = "亏损:"
 L["DPS"] = "伤害输出"
 L["Earned:"] = "赚取:"
 L["Friends List"] = "好友列表"
@@ -78,12 +76,12 @@ L["Home Latency:"] = "本机延迟:"
 L["HP"] = "生命值"
 L["HPS"] = "治疗输出"
 L["lvl"] = "等级"
-L["Miss Chance"] = true;
+L["Miss Chance"] = true
 L["Mitigation By Level: "] = "等级减伤: "
 L["No Guild"] = "没有公会"
 L["Profit:"] = "利润:"
-L["Reset Counters: Hold Shift + Left Click"] = "重置计数器: 按住Shift + 左键点击"
-L["Reload UI"] = true;
+L["Reload UI"] = true
+L["Reset Counters: Hold Control + Right Click"] = "重置计数器: 按住 Ctrl + 右键点击"
 L["Reset Data: Hold Shift + Right Click"] = "重置数据: 按住 Shift + 右键点击"
 L["Saved Dungeon(s)"] = "已有进度的地下城"
 L["Saved Raid(s)"] = "已有进度的副本"
@@ -99,7 +97,7 @@ L["Total CPU:"] = "CPU占用"
 L["Total Memory:"] = "总内存:"
 L["Total: "] = "合计: "
 L["Unhittable:"] = "未命中:"
-L["Wintergrasp"] = true;
+L["Wintergrasp"] = true
 
 --DebugTools
 L["%s: %s tried to call the protected function '%s'."] = "%s: %s 尝试调用保护函数 '%s'."
@@ -122,7 +120,7 @@ L["Aura Bars & Icons"] = "光环条与图标"
 L["Auras Set"] = "光环样式设置"
 L["Auras"] = "光环"
 L["Caster DPS"] = "法系输出"
-L["Chat Set"] = "对话设定"
+L["Chat Set"] = "聊天设定"
 L["Chat"] = "聊天框"
 L["Choose a theme layout you wish to use for your initial setup."] = "为你的个人设置选择一个你喜欢的皮肤主题."
 L["Classic"] = "经典"
@@ -159,7 +157,7 @@ L["Resolution"] = "分辨率"
 L["Select the type of aura system you want to use with ElvUI's unitframes. Set to Aura Bar & Icons to use both aura bars and icons, set to icons only to only see icons."] = "选择你想要在ElvUI的单位框体里使用何种光环系统. 选择光环条和图标将同时使用光环条和图标, 选择图标来仅仅显示图标."
 L["Setup Chat"] = "设定聊天框"
 L["Setup CVars"] = "设定参数"
-L["Skip Process"] = "略过"
+L["Skip Process"] = "跳过"
 L["Sticky Frames"] = "框架依附"
 L["Tank"] = "坦克"
 L["The chat windows function the same as Blizzard standard chat windows, you can right click the tabs and drag them around, rename, etc. Please click the button below to setup your chat windows."] = "对话窗口与 WOW 原始对话窗口的操作方式相同，你可以拖拉、移动分页或重新命名分页。请按下方按钮以设定对话窗口。"
@@ -189,7 +187,7 @@ L["Disband Group"] = "解散队伍"
 L["Empty Slot"] = "空拾取位"
 L["Enable"] = "启用"
 L["Experience"] = "经验/声望条"
-L["Farm Mode"] = true;
+L["Farm Mode"] = true
 L["Fishy Loot"] = "贪婪"
 L["Left Click:"] = "鼠标左键:"
 L["Raid Menu"] = "团队菜单"
@@ -237,7 +235,7 @@ L["Player Castbar"] = "玩家施法条"
 L["Player Debuffs"] = "玩家减益"
 L["Player Frame"] = "玩家框架"
 L["Player Powerbar"] = "玩家能量条"
-L["PvP"] = true;
+L["PvP"] = true
 L["Raid Frames"] = "团队框架"
 L["Raid Pet Frames"] = "团队宠物框架"
 L["Raid-40 Frames"] = "40人团队框架"
@@ -251,7 +249,7 @@ L["TargetTarget Frame"] = "目标的目标框架"
 L["TargetTargetTarget Frame"] = "目标的目标的目标框架"
 L["Tooltip"] = "鼠标提示"
 L["Vehicle Seat Frame"] = "载具座位框"
-L["Watch Frame"] = true;
+L["Watch Frame"] = true
 L["DESC_MOVERCONFIG"] = [=[解除框架移动锁定. 现在可以移动它们, 移好后请点击「锁定」.
 
 选项：
@@ -274,7 +272,7 @@ L["Already Running.. Bailing Out!"] = "正在运行!"
 L["Battleground datatexts temporarily hidden, to show type /bgstats or right click the 'C' icon near the minimap."] = "战场信息暂时隐藏, 你可以通过输入/bgstats 或右键点击小地图旁「C」按钮显示."
 L["Battleground datatexts will now show again if you are inside a battleground."] = "当你处于战场时战场信息将再次显示."
 L["Binds Discarded"] = "取消绑定"
-L["Binds Saved"] = "储存绑定"
+L["Binds Saved"] = "保存绑定"
 L["Confused.. Try Again!"] = "请再试一次！"
 L["No gray items to delete."] = "没有要删除的灰色物品"
 L["The spell '%s' has been added to the Blacklist unitframe aura filter."] = "法术'%s'已经被添加到单位框架的光环过滤器中."
@@ -288,7 +286,7 @@ L["|cFFE30000Lua error recieved. You can view the error message when you exit co
 
 --Static Popups
 L["A setting you have changed will change an option for this character only. This setting that you have changed will be uneffected by changing user profiles. Changing this setting requires that you reload your User Interface."] = "你所做的改动只会影响到使用这个插件的本角色, 你需要重新加载界面才能使改动生效."
-L["Accepting this will reset the UnitFrame settings for %s. Are you sure?"] = true
+L["Accepting this will reset the UnitFrame settings for %s. Are you sure?"] = "接受这个将重置关于%s的单位单位框架. 你确定吗？"
 L["Accepting this will reset your Filter Priority lists for all auras on NamePlates. Are you sure?"] = "接受这个将重置姓名版中所有光环的过滤器优先级. 你确定吗？"
 L["Accepting this will reset your Filter Priority lists for all auras on UnitFrames. Are you sure?"] = "接受这个将重置单位框架中所有光环的过滤器优先级. 你确定吗？"
 L["Are you sure you want to apply this font to all ElvUI elements?"] = "确定要对所有ElvUI元素使用这个字体?"
@@ -298,14 +296,14 @@ L["Are you sure you want to reset every mover back to it's default position?"] =
 L["Because of the mass confusion caused by the new aura system I've implemented a new step to the installation process. This is optional. If you like how your auras are setup go to the last step and click finished to not be prompted again. If for some reason you are prompted repeatedly please restart your game."] = "由于大量的改动导致光环系统需要一个新的安装过程. 这是可选的, 最后一步将设置你的光环样式. 点击「完成」将不再提示. 如果由于某些原因反复提示, 请重新开启游戏."
 L["Can't buy anymore slots!"] = "银行背包栏位已达最大值"
 L["Delete gray items?"] = "删除灰色物品?"
-L["Disable Warning"] = "停用警告"
+L["Disable Warning"] = "禁用警告"
 L["Discard"] = "取消"
 L["Do you enjoy the new ElvUI?"] = "你喜欢新的ElvUI么？"
 L["Do you swear not to post in technical support about something not working without first disabling the addon/module combination first?"] = "你发誓在你没停用其他插件前不会到技术支持询问某些功能失效吗？"
 L["ElvUI is five or more revisions out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI/"] = "ElvUI已过期5个或者更多的版本。你可以在 https://github.com/ElvUI-WotLK/ElvUI/ 下载到最新的版本"
-L["ElvUI is out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI/"] = true;
+L["ElvUI is out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI/"] = true
 L["ElvUI needs to perform database optimizations please be patient."] = "ElvUI需要进行数据库优化，请耐性等待。"
-L["Error resetting UnitFrame."] = true
+L["Error resetting UnitFrame."] = "重置单位框架出现错误."
 L["Hover your mouse over any actionbutton or spellbook button to bind it. Press the escape key or right click to clear the current actionbutton's keybinding."] = "移动鼠标到动作条或技能书按钮上绑定快捷键. 按ESC或鼠标右键取消目前快捷键"
 L["I Swear"] = '我承诺'
 L["No, Revert Changes!"] = "不，撤销修改！"

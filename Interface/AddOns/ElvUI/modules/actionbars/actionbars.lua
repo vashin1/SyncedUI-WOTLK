@@ -32,8 +32,9 @@ local LEAVE_VEHICLE = LEAVE_VEHICLE;
 
 local LAB = LibStub("LibActionButton-1.0");
 local LSM = LibStub("LibSharedMedia-3.0");
-
 local LBF = LibStub("LibButtonFacade", true);
+
+local UIHider
 
 AB["handledBars"] = {};
 AB["handledbuttons"] = {};
@@ -98,10 +99,15 @@ function AB:PositionAndSizeBar(barName)
 	local numColumns = ceil(numButtons / buttonsPerRow);
 	local widthMult = self.db[barName].widthMult;
 	local heightMult = self.db[barName].heightMult;
+	local visibility = self.db[barName].visibility
 	local bar = self["handledBars"][barName];
 
 	bar.db = self.db[barName];
 	bar.db.position = nil;
+
+	if visibility and visibility:match("[\n\r]") then
+		visibility = visibility:gsub("[\n\r]","")
+	end
 
 	if(numButtons < buttonsPerRow) then
 		buttonsPerRow = numButtons;
@@ -215,7 +221,7 @@ function AB:PositionAndSizeBar(barName)
 
 		local page = self:GetPage(barName, self["barDefaults"][barName].page, self["barDefaults"][barName].conditions);
 		bar:Show();
-		RegisterStateDriver(bar, "visibility", self.db[barName].visibility);
+		RegisterStateDriver(bar, "visibility", visibility)
 		RegisterStateDriver(bar, "page", page);
 		bar:SetAttribute("page", page);
 
@@ -296,9 +302,9 @@ function AB:PLAYER_REGEN_ENABLED()
 		self:UpdateButtonSettings()
 		AB.NeedsUpdateButtonSettings = nil
 	end
-	if AB.NeedsUpdateMicroPositionDimensions then
-		self:UpdateMicroPositionDimensions()
-		AB.NeedsUpdateMicroPositionDimensions = nil
+	if AB.NeedsUpdateMicroBarVisibility then
+		self:UpdateMicroBarVisibility()
+		AB.NeedsUpdateMicroBarVisibility = nil
 	end
 	if AB.NeedsAdjustMaxStanceButtons then
 		AB:AdjustMaxStanceButtons(AB.NeedsAdjustMaxStanceButtons) --sometimes it holds the event, otherwise true. pass it before we nil it.
@@ -307,6 +313,10 @@ function AB:PLAYER_REGEN_ENABLED()
 	if AB.NeedsPositionAndSizeBarTotem then
 		self:PositionAndSizeBarTotem()
 		AB.NeedsPositionAndSizeBarTotem = nil
+	end
+	if AB.NeedRecallButtonUpdate then
+		MultiCastRecallSpellButton_Update(MultiCastRecallSpellButton)
+		AB.NeedRecallButtonUpdate = nil
 	end
 
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED");
@@ -548,20 +558,19 @@ function AB:StyleButton(button, noBackdrop, useMasque)
 		icon:SetInside();
 	end
 
-	if(self.db.hotkeytext) then
+	if self.db.hotkeytext or self.db.useRangeColorText then
 		hotkey:FontTemplate(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline);
-		hotkey:SetTextColor(color.r, color.g, color.b);
+		if button.config and (button.config.outOfRangeColoring ~= "hotkey") then
+			button.hotkey:SetTextColor(color.r, color.g, color.b)
+		end
 	end
 
 	if(macroName) then
 		if(self.db.macrotext) then
-			macroName:Show();
 			macroName:FontTemplate(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline);
 			macroName:ClearAllPoints();
 			macroName:Point("BOTTOM", 2, 2);
 			macroName:SetJustifyH("CENTER");
-		else
-			macroName:Hide()
 		end
 	end
 
@@ -581,44 +590,52 @@ function AB:StyleButton(button, noBackdrop, useMasque)
 end
 
 function AB:Bar_OnEnter(bar)
-	if(bar:GetParent() == self.fadeParent) then
-		if(not self.fadeParent.mouseLock) then
-			E:UIFrameFadeIn(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1);
+	if bar:GetParent() == self.fadeParent then
+		if not self.fadeParent.mouseLock then
+			E:UIFrameFadeIn(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1)
 		end
-	elseif(bar.mouseover) then
+	end
+
+	if bar.mouseover then
 		E:UIFrameFadeIn(bar, 0.2, bar:GetAlpha(), bar.db.alpha)
 	end
 end
 
 function AB:Bar_OnLeave(bar)
-	if(bar:GetParent() == self.fadeParent) then
-		if(not self.fadeParent.mouseLock) then
-			E:UIFrameFadeOut(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1 - self.db.globalFadeAlpha);
+	if bar:GetParent() == self.fadeParent then
+		if not self.fadeParent.mouseLock then
+			E:UIFrameFadeOut(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1 - self.db.globalFadeAlpha)
 		end
-	elseif(bar.mouseover) then
-		E:UIFrameFadeOut(bar, 0.2, bar:GetAlpha(), 0);
+	end
+
+	if bar.mouseover then
+		E:UIFrameFadeOut(bar, 0.2, bar:GetAlpha(), 0)
 	end
 end
 
 function AB:Button_OnEnter(button)
-	local bar = button:GetParent();
-	if(bar:GetParent() == self.fadeParent) then
-		if(not self.fadeParent.mouseLock) then
-			E:UIFrameFadeIn(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1);
+	local bar = button:GetParent()
+	if bar:GetParent() == self.fadeParent then
+		if not self.fadeParent.mouseLock then
+			E:UIFrameFadeIn(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1)
 		end
-	elseif(bar.mouseover) then
-		E:UIFrameFadeIn(bar, 0.2, bar:GetAlpha(), bar.db.alpha);
+	end
+
+	if bar.mouseover then
+		E:UIFrameFadeIn(bar, 0.2, bar:GetAlpha(), bar.db.alpha)
 	end
 end
 
 function AB:Button_OnLeave(button)
-	local bar = button:GetParent();
-	if(bar:GetParent() == self.fadeParent) then
-		if(not self.fadeParent.mouseLock) then
-			E:UIFrameFadeOut(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1 - self.db.globalFadeAlpha);
+	local bar = button:GetParent()
+	if bar:GetParent() == self.fadeParent then
+		if not self.fadeParent.mouseLock then
+			E:UIFrameFadeOut(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1 - self.db.globalFadeAlpha)
 		end
-	elseif(bar.mouseover) then
-		E:UIFrameFadeOut(bar, 0.2, bar:GetAlpha(), 0);
+	end
+
+	if bar.mouseover then
+		E:UIFrameFadeOut(bar, 0.2, bar:GetAlpha(), 0)
 	end
 end
 
@@ -655,54 +672,69 @@ function AB:FadeParent_OnEvent(event, unit)
 end
 
 function AB:DisableBlizzard()
-	local UIHider = CreateFrame("Frame");
-	UIHider:Hide();
+	UIHider = CreateFrame("Frame")
+	UIHider:Hide()
 
-	MultiBarBottomLeft:SetParent(UIHider);
-	MultiBarBottomLeft.Show = E.noop;
-	MultiBarBottomRight:SetParent(UIHider);
-	MultiBarBottomRight.Show = E.noop;
-	MultiBarLeft:SetParent(UIHider);
-	MultiBarLeft.Show = E.noop;
-	MultiBarRight:SetParent(UIHider);
-	MultiBarRight.Show = E.noop;
+	MultiBarBottomLeft:SetParent(UIHider)
+	MultiBarBottomLeft.Show = E.noop
+	MultiBarBottomRight:SetParent(UIHider)
+	MultiBarBottomRight.Show = E.noop
+	MultiBarLeft:SetParent(UIHider)
+	MultiBarLeft.Show = E.noop
+	MultiBarRight:SetParent(UIHider)
+	MultiBarRight.Show = E.noop
 
-	for i = 1,12 do
-		_G["ActionButton" .. i]:Hide();
-		_G["ActionButton" .. i]:UnregisterAllEvents();
-		_G["ActionButton" .. i]:SetAttribute("statehidden", true);
+	-- Hide MultiBar Buttons, but keep the bars alive
+	for i = 1, 12 do
+		_G["ActionButton"..i]:Hide()
+		_G["ActionButton"..i]:UnregisterAllEvents()
+		_G["ActionButton"..i]:SetAttribute("statehidden", true)
 
-		_G["MultiBarBottomLeftButton" .. i]:Hide();
-		_G["MultiBarBottomLeftButton" .. i]:UnregisterAllEvents();
-		_G["MultiBarBottomLeftButton" .. i]:SetAttribute("statehidden", true);
+		_G["MultiBarBottomLeftButton"..i]:Hide()
+		_G["MultiBarBottomLeftButton"..i]:UnregisterAllEvents()
+		_G["MultiBarBottomLeftButton"..i]:SetAttribute("statehidden", true)
 
-		_G["MultiBarBottomRightButton" .. i]:Hide();
-		_G["MultiBarBottomRightButton" .. i]:UnregisterAllEvents();
-		_G["MultiBarBottomRightButton" .. i]:SetAttribute("statehidden", true);
+		_G["MultiBarBottomRightButton"..i]:Hide()
+		_G["MultiBarBottomRightButton"..i]:UnregisterAllEvents()
+		_G["MultiBarBottomRightButton"..i]:SetAttribute("statehidden", true)
 
-		_G["MultiBarRightButton" .. i]:Hide();
-		_G["MultiBarRightButton" .. i]:UnregisterAllEvents();
-		_G["MultiBarRightButton" .. i]:SetAttribute("statehidden", true);
+		_G["MultiBarRightButton"..i]:Hide()
+		_G["MultiBarRightButton"..i]:UnregisterAllEvents()
+		_G["MultiBarRightButton"..i]:SetAttribute("statehidden", true)
 
-		_G["MultiBarLeftButton" .. i]:Hide();
-		_G["MultiBarLeftButton" .. i]:UnregisterAllEvents();
-		_G["MultiBarLeftButton" .. i]:SetAttribute("statehidden", true);
+		_G["MultiBarLeftButton"..i]:Hide()
+		_G["MultiBarLeftButton"..i]:UnregisterAllEvents()
+		_G["MultiBarLeftButton"..i]:SetAttribute("statehidden", true)
 
-		if(_G["VehicleMenuBarActionButton" .. i]) then
-			_G["VehicleMenuBarActionButton" .. i]:Hide();
-			_G["VehicleMenuBarActionButton" .. i]:UnregisterAllEvents();
-			_G["VehicleMenuBarActionButton" .. i]:SetAttribute("statehidden", true);
+		if _G["VehicleMenuBarActionButton"..i] then
+			_G["VehicleMenuBarActionButton"..i]:Hide()
+			_G["VehicleMenuBarActionButton"..i]:UnregisterAllEvents()
+			_G["VehicleMenuBarActionButton"..i]:SetAttribute("statehidden", true)
+ 		end
+
+		_G["BonusActionButton"..i]:Hide()
+		_G["BonusActionButton"..i]:UnregisterAllEvents()
+		_G["BonusActionButton"..i]:SetAttribute("statehidden", true)
+
+		if E.myclass ~= "SHAMAN" then
+			_G["MultiCastActionButton"..i]:Hide()
+			_G["MultiCastActionButton"..i]:UnregisterAllEvents()
+			_G["MultiCastActionButton"..i]:SetAttribute("statehidden", true)
 		end
-
-		_G["BonusActionButton"..i]:Hide();
-		_G["BonusActionButton"..i]:UnregisterAllEvents();
-		_G["BonusActionButton"..i]:SetAttribute("statehidden", true);
 	end
 
 	MultiCastActionBarFrame.ignoreFramePositionManager = true;
 
 	MainMenuBar:Hide();
 	MainMenuBar:SetParent(UIHider);
+
+	MainMenuExpBar:UnregisterAllEvents()
+	MainMenuExpBar:Hide()
+	MainMenuExpBar:SetParent(UIHider)
+
+	ReputationWatchBar:UnregisterAllEvents()
+	ReputationWatchBar:Hide()
+	ReputationWatchBar:SetParent(UIHider)
 
 	MainMenuBarArtFrame:UnregisterAllEvents()
 	MainMenuBarArtFrame:RegisterEvent("KNOWN_CURRENCY_TYPES_UPDATE")
@@ -730,6 +762,21 @@ function AB:DisableBlizzard()
 	VehicleMenuBar:Hide();
 	VehicleMenuBar:SetParent(UIHider);
 
+	if E.myclass ~= "SHAMAN" then
+		MultiCastActionBarFrame:UnregisterAllEvents()
+		MultiCastActionBarFrame:Hide()
+		MultiCastActionBarFrame:SetParent(UIHider)
+	end
+
+	InterfaceOptionsActionBarsPanelAlwaysShowActionBars:EnableMouse(false)
+	InterfaceOptionsActionBarsPanelAlwaysShowActionBars:SetAlpha(0)
+
+	InterfaceOptionsActionBarsPanelLockActionBars:EnableMouse(false)
+	InterfaceOptionsActionBarsPanelLockActionBars:SetAlpha(0)
+
+	InterfaceOptionsStatusTextPanelXP:SetAlpha(0)
+	InterfaceOptionsStatusTextPanelXP:SetScale(0.0001)
+
 	self:SecureHook("BlizzardOptionsPanel_OnEvent");
 
 	if(PlayerTalentFrame) then
@@ -751,6 +798,7 @@ function AB:UpdateButtonConfig(bar, buttonName)
 	bar.buttonConfig.hideElements.hotkey = not self.db.hotkeytext;
 	bar.buttonConfig.showGrid = self.db["bar" .. bar.id].showGrid;
 	bar.buttonConfig.clickOnDown = self.db.keyDown;
+	bar.buttonConfig.outOfRangeColoring = (self.db.useRangeColorText and "hotkey") or "button"
 	SetModifiedClick("PICKUPACTION", self.db.movementModifier);
 	bar.buttonConfig.colors.range = E:GetColorTable(self.db.noRangeColor);
 	bar.buttonConfig.colors.mana = E:GetColorTable(self.db.noPowerColor);
@@ -792,8 +840,6 @@ function AB:FixKeybindText(button)
 		text = gsub(text, "INSERT", L["KEY_INSERT"]);
 		text = gsub(text, "HOME", L["KEY_HOME"]);
 		text = gsub(text, "DELETE", L["KEY_DELETE"]);
-		text = gsub(text, "MOUSEWHEELUP", L["KEY_MOUSEWHEELUP"]);
-		text = gsub(text, "MOUSEWHEELDOWN", L["KEY_MOUSEWHEELDOWN"]);
 		text = gsub(text, "NMULTIPLY", "*");
 		text = gsub(text, "NMINUS", "N-");
 		text = gsub(text, "NPLUS", "N+");
@@ -801,27 +847,27 @@ function AB:FixKeybindText(button)
 		hotkey:SetText(text);
 	end
 
-	hotkey:ClearAllPoints();
-	hotkey:Point("TOPRIGHT", 0, -3);
+	if not button.useMasque then
+		hotkey:ClearAllPoints()
+		hotkey:Point("TOPRIGHT", 0, -3)
+	end
 end
 
 local color;
 function AB:LAB_ButtonUpdate(button)
 	color = AB.db.fontColor;
 	button.count:SetTextColor(color.r, color.g, color.b);
-	button.hotkey:SetTextColor(color.r, color.g, color.b);
+	if button.config and (button.config.outOfRangeColoring ~= "hotkey") then
+		button.hotkey:SetTextColor(color.r, color.g, color.b)
+	end
 end
 LAB.RegisterCallback(AB, "OnButtonUpdate", AB.LAB_ButtonUpdate);
 
 local function Saturate(cooldown)
-	if not E.private.cooldown.enable then
-		cooldown:GetParent().icon:SetDesaturated(false)
+	if cooldown:GetParent():GetParent():GetParent().icon then
+		cooldown:GetParent():GetParent():GetParent().icon:SetDesaturated(false)
 	else
-		if cooldown:GetParent():GetParent():GetParent().icon then
-			cooldown:GetParent():GetParent():GetParent().icon:SetDesaturated(false)
-		else
-			cooldown:GetParent().icon:SetDesaturated(false)
-		end
+		cooldown:GetParent().icon:SetDesaturated(false)
 	end
 end
 
@@ -836,14 +882,10 @@ local function OnCooldownUpdate(_, button, start, duration)
 		--Hook cooldown done and add colors back
 		if not button.onCooldownDoneHooked then
 			button.onCooldownDoneHooked = true
-			if not E.private.cooldown.enable then
-				AB:HookScript(button.cooldown, "OnHide", Saturate)
+			if button.cooldown.timer then
+				AB:HookScript(button.cooldown.timer, "OnHide", Saturate)
 			else
-				if button.cooldown.timer then
-					AB:HookScript(button.cooldown.timer, "OnHide", Saturate)
-				else
-					AB:HookScript(button.cooldown, "OnHide", Saturate)
-				end
+				AB:HookScript(button.cooldown, "OnHide", Saturate)
 			end
 		end
 	end
@@ -866,14 +908,10 @@ function AB:ToggleDesaturation(value)
 			button.saturationLocked = nil
 			button.icon:SetDesaturated(false)
 			if button.onCooldownDoneHooked then
-				if not E.private.cooldown.enable then
-					AB:Unhook(button.cooldown, "OnHide")
+				if button.cooldown.timer then
+					AB:Unhook(button.cooldown.timer, "OnHide")
 				else
-					if button.cooldown.timer then
-						AB:Unhook(button.cooldown.timer, "OnHide")
-					else
-						AB:Unhook(button.cooldown, "OnHide")
-					end
+					AB:Unhook(button.cooldown, "OnHide")
 				end
 				button.onCooldownDoneHooked = nil
 			end
