@@ -21,6 +21,7 @@ local UnitInRaid = UnitInRaid
 local UnitName = UnitName
 local WorldFrame = WorldFrame
 local WorldGetChildren = WorldFrame.GetChildren
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
 local numChildren = 0
 local OVERLAY = [=[Interface\TargetingFrame\UI-TargetingFrame-Flash]=]
@@ -197,9 +198,9 @@ function mod:SetTargetFrame(frame)
 
 				mod:UpdateElement_AurasByGUID(frame.guid)
 				mod:UpdateElement_Highlight(frame)
+				mod:UpdateElement_Cast(frame, nil, frame.unit)
 			end
 		end
-		mod:UpdateElement_Cast(frame, nil, frame.unit)
 	elseif frame.isMouseover then
 		frame.isMouseover = nil
 
@@ -421,6 +422,8 @@ function mod:OnShow()
 
 	self.UnitFrame.Level:ClearAllPoints()
 	self.UnitFrame.Name:ClearAllPoints()
+
+	self.UnitFrame.CutawayHealth:Hide()
 
 	if mod.db.units[unitType].healthbar.enable or mod.db.alwaysShowTargetHealth then
 		mod:ConfigureElement_HealthBar(self.UnitFrame)
